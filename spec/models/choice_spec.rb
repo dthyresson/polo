@@ -24,3 +24,15 @@ describe Choice, ".ordered" do
     expect(Choice.ordered).to eq([fred_choice, doug_choice, charlie_choice, bob_choice, alice_choice])
   end
 end
+
+describe Choice, ".by_popularity" do
+  it "orders the choices for display inverse alphabeticaly so Yes comes before No" do
+    alice_choice = create :choice, title: "Alice", popularity: 0
+    doug_choice = create :choice, title: "Doug", popularity: 0.30
+    bob_choice = create :choice, title: "Bob", popularity: 0.12
+    fred_choice = create :choice, title: "Fred", popularity: 0.40
+    charlie_choice = create :choice, title: "Charlie", popularity: 0.18
+
+    expect(Choice.by_popularity).to eq([fred_choice, doug_choice, charlie_choice, bob_choice, alice_choice])
+  end
+end

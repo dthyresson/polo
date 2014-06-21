@@ -12,4 +12,8 @@ class Choice < ActiveRecord::Base
   def self.ordered
     order("title desc")
   end
+
+  def self.by_popularity
+    order("popularity desc")
+  end
 end

@@ -249,3 +249,81 @@ describe Poll, "#votes_remaining_count" do
     expect(poll.reload.votes_remaining_count).to eq(1)
   end
 end
+
+describe Poll, "#top_choice" do
+  it "determines which of the poll's choices has the most votes" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.second.cast!(yes)
+    poll.votes.last.cast!(no)
+
+    poll.calculate_popularity!
+
+    expect(poll.top_choice).to eq(yes)
+  end
+
+  it "handles the case when all have no votes as an undecided" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.calculate_popularity!
+
+    expect(poll.top_choice.title).to eq("Tied")
+  end
+
+  it "handles the case when there is a tie" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.last.cast!(no)
+
+    poll.calculate_popularity!
+
+    expect(poll.top_choice.title).to eq("Tied")
+  end
+end
+
+describe Poll, "#tied?" do
+  it "is not a tie if a clear winner" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.second.cast!(yes)
+    poll.votes.last.cast!(no)
+
+    poll.calculate_popularity!
+
+    expect(poll).to_not be_tied
+  end
+
+  it "is a tie when no votes case" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.calculate_popularity!
+
+    expect(poll).to be_tied
+  end
+
+  it "handles the case when there is a tie" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.last.cast!(no)
+
+    poll.calculate_popularity!
+
+    expect(poll).to be_tied
+  end
+end

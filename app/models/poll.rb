@@ -89,6 +89,26 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def top_choice
+    @top_choice ||= begin
+                      top = choices.by_popularity.first
+                      if not tied?
+                        top
+                      else
+                        Choice.new({title: "Tied", popularity: top.popularity})
+                      end
+                    end
+  end
+
+  def tied?
+    if choices.count <= 1
+      return false
+    end
+
+    top_choices = choices.by_popularity.take(2)
+    top_choices.map(&:popularity).uniq.size == 1
+  end
+
   def to_builder(phone_numbers = nil)
     Jbuilder.encode do |json|
       json.poll do
