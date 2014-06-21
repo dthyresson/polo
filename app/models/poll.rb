@@ -54,6 +54,10 @@ class Poll < ActiveRecord::Base
     not in_progress?
   end
 
+  def votes_cast_count
+    votes.cast_count
+  end
+
   def publish_to_voter_phone_numbers(phone_numbers = nil)
     if phone_numbers
       phone_numbers.each do |phone_number|

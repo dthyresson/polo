@@ -121,3 +121,19 @@ describe Poll, "#photo_url" do
     end
   end
 end
+
+describe Poll, "#votes_cast_count" do
+  it "returns the number of vote cast on the poll" do
+    poll = create :yes_no_poll_with_uncast_votes
+    another_poll = create :yes_no_poll_with_uncast_votes
+    last_poll = create :yes_no_poll_with_uncast_votes
+
+    poll.votes.first.cast!(poll.choices.first)
+    poll.votes.last.cast!(poll.choices.first)
+    another_poll.votes.last.cast!(poll.choices.last)
+
+    expect(poll.votes_cast_count).to eq(2)
+    expect(another_poll.votes_cast_count).to eq(1)
+    expect(last_poll.votes_cast_count).to eq(0)
+  end
+end

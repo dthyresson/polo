@@ -8,6 +8,14 @@ class Vote < ActiveRecord::Base
     Vote.find(id).first
   end
 
+  def self.cast
+    where("choice_id is not null")
+  end
+
+  def self.cast_count
+    self.cast.count
+  end
+
   def short_url
     HASHIDS.encrypt(self.id)
   end

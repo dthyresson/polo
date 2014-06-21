@@ -89,3 +89,27 @@ describe Vote, "#question" do
     expect(vote.question).to eq(question)
   end
 end
+
+describe Vote, ".cast" do
+  it "returns only cast votes" do
+    poll = create :yes_no_poll_with_uncast_votes
+    another_poll = create :yes_no_poll_with_uncast_votes
+
+    poll.votes.first.cast!(poll.choices.first)
+    another_poll.votes.last.cast!(poll.choices.last)
+
+    expect(Vote.cast).to match_array([poll.votes.first, another_poll.votes.last])
+  end
+end
+
+describe Vote, ".cast_count" do
+  it "return the number of cast votes" do
+    poll = create :yes_no_poll_with_uncast_votes
+    another_poll = create :yes_no_poll_with_uncast_votes
+
+    poll.votes.first.cast!(poll.choices.first)
+    another_poll.votes.last.cast!(poll.choices.last)
+
+    expect(Vote.cast_count).to eq(2)
+  end
+end
