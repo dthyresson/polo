@@ -9,12 +9,10 @@ class Api::V1::PollsController < ApiController
 
   def create
     poll_author = author
-    poll_photo = photo
 
     @poll = Poll.new(poll_params)
 
     @poll.author = poll_author
-    @poll.photo = poll_photo if poll_photo
 
     if @poll.save
       unless Rails.env.test?
@@ -63,18 +61,11 @@ class Api::V1::PollsController < ApiController
     author
   end
 
-  def photo
-    if params[:poll][:photo_data]
-      @photo ||= Paperclip::DataUriAdapter.new(params[:poll][:photo_data])
-      params[:poll].delete :photo_data
-    end
-  end
-
   def poll_params
     params.require(:poll).permit( :author_name,
                                   :author_device_id,
                                   :question,
-                                  :photo_data,
+                                  :photo,
                                  {:choices_attributes => [:title]} )
 
   end

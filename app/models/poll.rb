@@ -137,7 +137,7 @@ class Poll < ActiveRecord::Base
         if phone_numbers.present?
           json.phone_numbers phone_numbers
         end
-        json.photo_data uri
+        json.photo uri
       end
     end
   end
