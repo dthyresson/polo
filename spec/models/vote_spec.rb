@@ -93,6 +93,43 @@ describe Vote, "#question" do
   end
 end
 
+describe Vote, "#votable?" do
+  it "checks if a vote can be cast as long as the poll is in progress and vote not already cast" do
+    question = "Do you like ice cream?"
+    poll = create :yes_no_poll_with_uncast_votes, question: question
+    vote = poll.votes.first
+    expect(vote).to be_votable
+  end
+
+  it "vote cannot be cast if poll is closed" do
+    question = "Do you like ice cream?"
+    poll = create :yes_no_poll_with_uncast_votes, question: question
+    vote = poll.votes.first
+    poll.end!
+    expect(vote).to_not be_votable
+  end
+
+  it "vote cannot be cast if vote cast" do
+    question = "Do you like ice cream?"
+    poll = create :yes_no_poll_with_uncast_votes, question: question
+    vote = poll.votes.first
+    vote.cast!(poll.choices.first)
+    expect(vote).to_not be_votable
+  end
+
+  it "vote cannot be cast if poll is closed and vote cast" do
+    question = "Do you like ice cream?"
+    poll = create :yes_no_poll_with_uncast_votes, question: question
+    vote = poll.votes.first
+    vote.cast!(poll.choices.first)
+    poll.end!
+    expect(vote).to_not be_votable
+  end
+
+end
+
+
+
 describe Vote, ".cast" do
   it "returns only cast votes" do
     poll = create :yes_no_poll_with_uncast_votes

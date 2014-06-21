@@ -39,4 +39,10 @@ class Vote < ActiveRecord::Base
   def voter_phone_number
     voter.phone_number
   end
+
+  def votable?
+    return false if poll.over?
+    return false if cast?
+    true
+  end
 end
