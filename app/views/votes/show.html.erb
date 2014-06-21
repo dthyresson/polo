@@ -1,6 +1,14 @@
-<h1><%= @vote.question -%><h1>
+<section>
+  <% if @poll.has_photo? %>
+    <h1><%= image_tag @poll.photo_url(:medium) -%></h1>
+  <% end %>
+  <% if @poll.has_question? %>
+    <h2><%= @vote.question -%></h2>
+  <% end %>
   <ul>
     <% @choices.each do |choice| %>
       <li><%= link_to choice.title, vote_path(@vote, choice_id: choice.id), method: :put -%></li>
     <% end %>
   </ul>
+</section
+>

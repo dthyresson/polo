@@ -7,7 +7,9 @@ if Rails.env.development?
       # FactoryGirl.find_definitions
       include FactoryGirl::Syntax::Methods
 
-        create :yes_no_poll_with_uncast_votes, question: "Do you forgive me?"
+      create :yes_no_poll_with_uncast_votes, question: "Do you forgive me?"
+      create :yes_no_poll_with_photo_and_uncast_votes, question: "Play Marco Polo?"
+      create :yes_no_poll_with_photo_and_uncast_votes, question: nil
     end
   end
 end
