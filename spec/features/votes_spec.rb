@@ -57,11 +57,7 @@ describe "Show Vote" do
     visit_vote_by_short_url vote.short_url
 
     expect(page).to have_content(poll.author_name)
-    expect(page).to have_content(question)
-    expect(page).to have_content("Yes")
-    expect(page).to have_content("No")
-    expect(page).to_not have_link("Yes")
-    expect(page).to_not have_link("No")
+    expect(page).to have_content("Closed")
   end
 
   it "prevents voting if the vote has already been cast" do
@@ -75,10 +71,8 @@ describe "Show Vote" do
 
     expect(page).to have_content(poll.author_name)
     expect(page).to have_content(question)
-    expect(page).to have_content("Yes")
-    expect(page).to have_content("No")
-    expect(page).to_not have_link("Yes")
-    expect(page).to_not have_link("No")
+    expect(page).to have_content(poll.choices.first.title)
+    expect(page).to_not have_link(poll.choices.first.title)
   end
 end
 

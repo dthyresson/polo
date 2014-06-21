@@ -3,6 +3,7 @@ class VotesController < ApplicationController
     @vote = Vote.find_by_short_url(params[:short_url])
     @poll = @vote.poll
     @choices = @poll.choices.ordered
+    @choice = @vote.choice
   end
 
   def update

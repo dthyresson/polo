@@ -1,15 +1,25 @@
-<section>
+<section class="vote">
   <h1><%= @poll.author_name -%> asks ...</h1>
+
   <% if @poll.has_photo? %>
     <h2><%= image_tag @poll.photo_url(:medium) -%></h2>
   <% end %>
+
   <% if @poll.has_question? %>
     <h3><%= @vote.question -%></h3>
   <% end %>
+
   <ul>
-    <% @choices.each do |choice| %>
-      <li><%= link_to_if @vote.votable?, choice.title, vote_path(@vote, choice_id: choice.id), method: :put -%></li>
-    <% end %>
+    <% if @vote.votable? %>
+      <% @choices.each do |choice| %>
+        <li><%= link_to choice.title, vote_path(@vote, choice_id: choice.id), method: :put, class: choice.title.downcase -%></li>
+      <% end %>
+    <% else %>
+      <% if @vote.cast? %>
+        <li class="<%= @choice.title.downcase -%>"><%= @choice.title -%></li>
+      <% else %>
+        <li class="closed">Closed</li>
+      <% end %>
+  <% end %>
   </ul>
-</section
->
+</section>
