@@ -9,8 +9,6 @@ class VotesController < ApplicationController
     @vote = Vote.find(params[:id])
     choice = Choice.find(params[:choice_id])
     @vote.cast!(choice) if choice
-    @poll = @vote.poll
-    @choices = @poll.choices
-    render :show
+    redirect_to vote_short_url_path(@vote.short_url)
   end
 end
