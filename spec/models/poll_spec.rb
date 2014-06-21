@@ -189,3 +189,33 @@ describe Poll, "#votes_cast_count" do
     expect(last_poll.votes_cast_count).to eq(0)
   end
 end
+
+describe Poll, "#ok_to_auto_close?" do
+  it "determines if a poll can be automatically closed when all votes have been cast" do
+    poll = create :yes_no_poll_with_uncast_votes
+    choice = poll.choices.first
+    poll.votes.each do |vote|
+      vote.cast!(choice)
+    end
+
+    expect(poll.reload).to be_ok_to_auto_close
+  end
+
+  it "should not be ok to close of no votes cast" do
+    poll = create :yes_no_poll_with_uncast_votes
+
+    expect(poll.reload).to_not be_ok_to_auto_close
+  end
+
+  it "should not be ok to close if only some votes cast" do
+    poll = create :yes_no_poll_with_uncast_votes
+    choice = poll.choices.first
+    sampling_of_votes = poll.votes.sample(poll.votes_count / 2)
+
+    sampling_of_votes.each do |vote|
+      vote.cast!(choice)
+    end
+
+    expect(poll.reload).to_not be_ok_to_auto_close
+  end
+end

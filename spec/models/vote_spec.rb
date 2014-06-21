@@ -40,6 +40,26 @@ describe Vote, "#cast!" do
     expect(vote.cast_at).to be_present
     expect(vote.choice).to eq(yes_choice)
   end
+
+  it "auto closes a poll when all votes cast" do
+    poll = create :yes_no_poll_with_uncast_votes
+    choice = poll.choices.first
+    poll.votes.each do |vote|
+      vote.cast!(choice)
+    end
+
+    expect(poll).to be_over
+  end
+
+  it "won't close a poll if only some votes cast" do
+    poll = create :yes_no_poll_with_uncast_votes
+    choice = poll.choices.first
+    vote = poll.votes.first
+    vote.cast!(choice)
+
+    expect(poll).to_not be_over
+  end
+
 end
 
 describe Vote, "#cast?" do

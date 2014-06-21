@@ -22,6 +22,7 @@ class Vote < ActiveRecord::Base
 
   def cast!(choice)
     update_attributes({ choice: choice, cast_at: Time.zone.now })
+    poll.end! if poll.ok_to_auto_close?
   end
 
   def cast?

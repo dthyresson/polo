@@ -66,6 +66,10 @@ class Poll < ActiveRecord::Base
     votes.cast_count
   end
 
+  def ok_to_auto_close?
+    votes_cast_count == votes.count
+  end
+
   def publish_to_voter_phone_numbers(phone_numbers = nil)
     if phone_numbers
       phone_numbers.each do |phone_number|
