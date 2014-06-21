@@ -8,7 +8,6 @@ describe Poll, "associations" do
 end
 
 describe Poll, "validations" do
-  it { should validate_presence_of :question}
   it { should accept_nested_attributes_for :choices }
 end
 
@@ -19,6 +18,59 @@ describe Poll, "photo attachment validations" do
                 rejecting('text/plain', 'text/xml') }
   it { should validate_attachment_size(:photo).
                 in(0..2.megabytes) }
+end
+
+describe Poll, "validate has either a question or photo" do
+  it "has to build a question" do
+    poll = create :yes_no_poll, question: "Valid question", photo: nil
+    expect(poll).to be_valid
+  end
+
+  it "has to have a photo" do
+    poll = build :yes_no_poll_with_photo, question: nil
+    poll.photo = File.new(File.expand_path("spec/fixtures/marco-polo-600x450.jpg"))
+    expect(poll).to be_valid
+  end
+
+  it "can have a both question and photo" do
+    poll = build :yes_no_poll_with_photo
+    poll.photo = File.new(File.expand_path("spec/fixtures/marco-polo-600x450.jpg"))
+    expect(poll).to be_valid
+  end
+
+  it "is invalid if lacks question or photo" do
+    poll = build :yes_no_poll, question: nil, photo: nil
+    expect(poll).to_not be_valid
+  end
+end
+
+describe Poll, "#has_photo" do
+  it "checks if there is a poll photo" do
+    poll = create :yes_no_poll_with_photo
+    expect(poll).to have_photo
+  end
+
+  it "checks that the poll photo is there" do
+    poll = create :poll, photo: nil
+    expect(poll).to_not have_photo
+  end
+end
+
+describe Poll, "#has_question" do
+  it "checks if there is a poll question text" do
+    poll = build :poll, question: "Do you forgive me?"
+    expect(poll).to have_question
+  end
+
+  it "checks that the poll question text is not blank" do
+    poll = build :poll, question: ""
+    expect(poll).to_not have_question
+  end
+
+  it "checks that the poll question text is there" do
+    poll = build :poll, question: nil
+    expect(poll).to_not have_question
+  end
 end
 
 describe Poll, "#to_builder" do

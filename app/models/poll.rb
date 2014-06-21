@@ -9,7 +9,7 @@ class Poll < ActiveRecord::Base
   validates_attachment_content_type :photo, content_type: /\Aimage\/.*\Z/
   validates_attachment_size :photo, in: (0..2.megabytes)
 
-  validates_presence_of :question
+  validate :has_question_or_photo?
 
   accepts_nested_attributes_for :author
   accepts_nested_attributes_for :choices
@@ -46,6 +46,14 @@ class Poll < ActiveRecord::Base
     update_attributes({ closed_at: Time.zone.now })
   end
 
+  def has_photo?
+    photo.present?
+  end
+
+  def has_question?
+    question.present?
+  end
+
   def in_progress?
     closed_at.nil?
   end
@@ -80,6 +88,14 @@ class Poll < ActiveRecord::Base
           json.phone_numbers phone_numbers
         end
       end
+    end
+  end
+
+  private
+
+  def has_question_or_photo?
+    unless has_question? or has_photo?
+      errors.add(:base, "Need a to ask a question or show a photo.")
     end
   end
 end
