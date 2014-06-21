@@ -1,4 +1,5 @@
 class Api::V1::PollsController < ApiController
+  before_action :authenticate, except: [ :create ]
 
   def close
     @poll = Poll.find(params[:id])
@@ -20,11 +21,15 @@ class Api::V1::PollsController < ApiController
   end
 
   def index
-    @polls = Poll.all
+    @polls = Poll.for_author(current_user)
   end
 
   def show
     @poll = Poll.find(params[:id])
+
+    unless @poll.author == current_user
+      render :json => { :errors => "Forbidden"}, status: 403
+    end
   end
 
   private

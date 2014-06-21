@@ -7,7 +7,7 @@ FactoryGirl.define do
 
     factory :author_with_device do
       after(:create) do |author, evaluator|
-        create(:device, author: author, device_id: "123456789")
+        create(:device, author: author, device_id: SecureRandom.hex(10))
       end
     end
   end
