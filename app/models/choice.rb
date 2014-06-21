@@ -8,4 +8,8 @@ class Choice < ActiveRecord::Base
   validates_numericality_of :popularity, greater_than_or_equal_to: 0
 
   accepts_nested_attributes_for :votes
+
+  def self.ordered
+    order("title desc")
+  end
 end
