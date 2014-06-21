@@ -80,14 +80,23 @@ class Poll < ActiveRecord::Base
     votes_cast_count == votes.count
   end
 
-  def publish_to_voter_phone_numbers(phone_numbers = nil)
-    if phone_numbers
+  def publish_to_voter_phone_numbers(phone_numbers = [])
+    if phone_numbers.present?
       phone_numbers.each do |phone_number|
         voter = Voter.find_or_create_by({phone_number: phone_number})
         Vote.create({voter: voter, poll: self})
+
+        unless Rails.env.test?
+          TWILIO.account.messages.create(
+            from: TWILIO_PHONE_NUMBER,
+            to: phone_number,
+            body: "#{author_name} wants to know, \"#{question}\""
+          )
+        end
       end
     end
   end
+  handle_asynchronously :publish_to_voter_phone_numbers
 
   def top_choice
     @top_choice ||= begin
