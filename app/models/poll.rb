@@ -6,6 +6,8 @@ class Poll < ActiveRecord::Base
 
   has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" },
                                        :default_url => "/images/:style/missing.png"
+  process_in_background :photo
+
   validates_attachment_content_type :photo, content_type: /\Aimage\/.*\Z/
   validates_attachment_size :photo, in: (0..2.megabytes)
 
@@ -96,7 +98,6 @@ class Poll < ActiveRecord::Base
       end
     end
   end
-  handle_asynchronously :publish_to_voter_phone_numbers
 
   def top_choice
     @top_choice ||= begin
@@ -119,6 +120,12 @@ class Poll < ActiveRecord::Base
   end
 
   def to_builder(phone_numbers = nil)
+
+    filename = "/Users/dthyresson/Dropbox/Photos/me/david_expos_bigwheel_180x180.jpeg"
+    image = File.read(filename)
+    data = Base64.encode64(image)
+    uri  = "data:image/png;base64,#{data}"
+
     Jbuilder.encode do |json|
       json.poll do
         json.author_name self.author_name
@@ -130,6 +137,7 @@ class Poll < ActiveRecord::Base
         if phone_numbers.present?
           json.phone_numbers phone_numbers
         end
+        json.data uri
       end
     end
   end

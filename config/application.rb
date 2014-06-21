@@ -6,6 +6,7 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
+require "base64"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 

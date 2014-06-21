@@ -13,7 +13,7 @@ class Api::V1::PollsController < ApiController
     @poll.author = poll_author
 
     if @poll.save
-      @poll.publish_to_voter_phone_numbers(phone_numbers)
+      @poll.delay.publish_to_voter_phone_numbers(phone_numbers)
       render :create
     else
       render :json => { :errors => @poll.errors.full_messages }
