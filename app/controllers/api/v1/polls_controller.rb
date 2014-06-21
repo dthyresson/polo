@@ -9,11 +9,19 @@ class Api::V1::PollsController < ApiController
 
   def create
     poll_author = author
+    poll_photo = photo
+
     @poll = Poll.new(poll_params)
+
     @poll.author = poll_author
+    @poll.photo = poll_photo if poll_photo
 
     if @poll.save
-      @poll.delay.publish_to_voter_phone_numbers(phone_numbers)
+      unless Rails.env.test?
+        @poll.publish_to_voter_phone_numbers(phone_numbers)
+      else
+        @poll.delay.publish_to_voter_phone_numbers(phone_numbers)
+      end
       render :create
     else
       render :json => { :errors => @poll.errors.full_messages }
@@ -55,11 +63,19 @@ class Api::V1::PollsController < ApiController
     author
   end
 
+  def photo
+    if params[:poll][:photo_data]
+      @photo ||= Paperclip::DataUriAdapter.new(params[:poll][:photo_data])
+      params[:poll].delete :photo_data
+    end
+  end
+
   def poll_params
-    params.require(:poll).permit(:author_name,
+    params.require(:poll).permit( :author_name,
                                   :author_device_id,
                                   :question,
-                                 {:choices_attributes => [:title]})
+                                  :photo_data,
+                                 {:choices_attributes => [:title]} )
 
   end
 end

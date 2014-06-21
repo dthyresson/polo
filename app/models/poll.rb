@@ -5,7 +5,7 @@ class Poll < ActiveRecord::Base
   has_many :voters, through: :votes
 
   has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" },
-                                       :default_url => "/images/:style/missing.png"
+                                         :default_url => "/images/:style/missing.png"
   process_in_background :photo
 
   validates_attachment_content_type :photo, content_type: /\Aimage\/.*\Z/
@@ -123,8 +123,8 @@ class Poll < ActiveRecord::Base
 
     filename = "/Users/dthyresson/Dropbox/Photos/me/david_expos_bigwheel_180x180.jpeg"
     image = File.read(filename)
-    data = Base64.encode64(image)
-    uri  = "data:image/png;base64,#{data}"
+    data = Base64.strict_encode64(image)
+    uri  = "data:image/jpeg;base64,#{data}"
 
     Jbuilder.encode do |json|
       json.poll do
@@ -137,7 +137,7 @@ class Poll < ActiveRecord::Base
         if phone_numbers.present?
           json.phone_numbers phone_numbers
         end
-        json.data uri
+        json.photo_data uri
       end
     end
   end

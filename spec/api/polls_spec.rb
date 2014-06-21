@@ -96,7 +96,7 @@ describe "Poll API GET" do
 end
 
 describe "Poll API POST" do
-  xit 'creates a new open poll with two choices' do
+  it 'creates a new open poll with two choices' do
     # should change to use fixture json
     author = create(:author_with_device)
 
@@ -120,7 +120,7 @@ describe "Poll API POST" do
     expect(poll.author.device_id).to eq(author.device_id)
   end
 
-  xit "creates a post with a photo and question" do
+  it "creates a post with a photo and question" do
     # should change to use fixture json
 
     poll = create :yes_no_poll_with_photo
@@ -158,7 +158,7 @@ describe "Poll API POST" do
     poll = Poll.last
     expect(poll).to be
 
-    expect(Voter.count).to eq(3)
+    expect(Voter.count).to eq(3) # failing
     expect(Vote.count).to eq(3)
     expect(poll.votes.count).to eq(3)
     expect(Voter.all.map(&:phone_number)).to match_array(phone_numbers)
