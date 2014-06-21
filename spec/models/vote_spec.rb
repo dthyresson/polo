@@ -71,3 +71,21 @@ describe Vote, "#choice_title" do
     expect(vote.choice_title).to eq(choice_title)
   end
 end
+
+describe Vote, "#find_by_short_url" do
+  it "finds the vote based on the short url token" do
+    vote = create :vote
+    found_vote = Vote.find_by_short_url(vote.short_url)
+    expect(found_vote).to be
+    expect(found_vote.id).to eq(found_vote.id)
+  end
+end
+
+describe Vote, "#question" do
+  it "gets the question from the vote's poll" do
+    question = "Do you like ice cream?"
+    poll = create :poll, question: question
+    vote = create :vote, poll: poll
+    expect(vote.question).to eq(question)
+  end
+end

@@ -1,0 +1,6 @@
+<h1><%= @vote.question -%><h1>
+  <ul>
+    <% @choices.each do |choice| %>
+      <li><%= link_to choice.title, vote_path(@vote, choice_id: choice.id), method: :put -%></li>
+    <% end %>
+  </ul>

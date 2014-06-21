@@ -4,10 +4,10 @@ if Rails.env.development?
   namespace :dev do
     desc 'Seed data for development environment'
     task prime: 'db:setup' do
-      FactoryGirl.find_definitions
+      # FactoryGirl.find_definitions
       include FactoryGirl::Syntax::Methods
 
-      # create(:user, email: 'user@example.com', password: 'password')
+        create :yes_no_poll_with_uncast_votes, question: "Do you forgive me?"
     end
   end
 end

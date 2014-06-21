@@ -24,6 +24,15 @@ Be sure to create a secret_key_base environment variable
 
 in your ``.env`` file.
 
+Be sure to install ImageMagick
+
+    brew install imagemagick
+
+and have the lastest libtool
+
+    brew install libtool
+
+
 Guidelines
 ----------
 
