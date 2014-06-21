@@ -41,6 +41,22 @@ describe Vote, "#cast!" do
     expect(vote.choice).to eq(yes_choice)
   end
 
+  it "cannot cast a vote for a choice if poll is closed" do
+    poll = create :yes_no_poll_with_uncast_votes
+
+    yes_choice = poll.choices.first
+    no_choice = poll.choices.last
+    vote = poll.votes.first
+
+    poll.end!
+
+    vote.cast!(yes_choice)
+
+    expect(vote).to_not be_cast
+    expect(vote.cast_at).to_not be_present
+    expect(vote.choice).to be_nil
+  end
+
   it "auto closes a poll when all votes cast" do
     poll = create :yes_no_poll_with_uncast_votes
     choice = poll.choices.first
@@ -145,10 +161,7 @@ describe Vote, "#votable?" do
     poll.end!
     expect(vote).to_not be_votable
   end
-
 end
-
-
 
 describe Vote, ".cast" do
   it "returns only cast votes" do

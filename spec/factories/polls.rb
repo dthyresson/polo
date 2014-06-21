@@ -14,8 +14,8 @@ FactoryGirl.define do
     factory :yes_no_poll do
       author factory: :author_with_device
       after(:create) do |poll, evaluator|
-        create(:yes_choice, poll: poll)
-        create(:no_choice, poll: poll)
+        create(:yes_choice, poll: poll, popularity: 0)
+        create(:no_choice, poll: poll, popularity: 0)
       end
 
       factory :yes_no_poll_with_photo do

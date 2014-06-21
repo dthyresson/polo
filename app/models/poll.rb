@@ -66,6 +66,16 @@ class Poll < ActiveRecord::Base
     votes.cast_count
   end
 
+  def calculate_popularity!
+    choices.each do |choice|
+      choice.update_attribute(:popularity, choice.votes.cast.count / votes.cast.count.to_f)
+    end
+  end
+
+  def votes_remaining_count
+    votes.count - votes_cast_count
+  end
+
   def ok_to_auto_close?
     votes_cast_count == votes.count
   end

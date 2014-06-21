@@ -21,7 +21,9 @@ class Vote < ActiveRecord::Base
   end
 
   def cast!(choice)
+    return if poll.over?
     update_attributes({ choice: choice, cast_at: Time.zone.now })
+    poll.calculate_popularity!
     poll.end! if poll.ok_to_auto_close?
   end
 

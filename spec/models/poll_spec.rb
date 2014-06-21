@@ -219,3 +219,33 @@ describe Poll, "#ok_to_auto_close?" do
     expect(poll.reload).to_not be_ok_to_auto_close
   end
 end
+
+describe Poll, "#calculate_popularity!" do
+  it "calculates popularity of all choices in the poll based on voting results" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.second.cast!(yes)
+    poll.votes.last.cast!(no)
+
+    poll.calculate_popularity!
+
+    expect(yes.reload.popularity).to be_within(0.1).of(0.66)
+    expect(no.reload.popularity).to be_within(0.1).of(0.33)
+  end
+end
+
+describe Poll, "#votes_remaining_count" do
+  it "figures out how many remaining votes until all in" do
+    poll = create :yes_no_poll_with_uncast_votes
+    yes = poll.choices.first
+    no = poll.choices.last
+
+    poll.votes.first.cast!(yes)
+    poll.votes.second.cast!(yes)
+
+    expect(poll.reload.votes_remaining_count).to eq(1)
+  end
+end
