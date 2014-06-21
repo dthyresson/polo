@@ -11,21 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140620125049) do
+ActiveRecord::Schema.define(version: 20140621110304) do
 
   create_table "authors", force: true do |t|
     t.string   "name"
     t.string   "phone_number"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "devices_count", default: 0
   end
 
   create_table "choices", force: true do |t|
     t.integer  "poll_id"
     t.string   "title"
-    t.float    "popularity", default: 0.0
+    t.float    "popularity",  default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "votes_count", default: 0
   end
 
   add_index "choices", ["poll_id"], name: "index_choices_on_poll_id", using: :btree
@@ -65,6 +67,8 @@ ActiveRecord::Schema.define(version: 20140620125049) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.datetime "closed_at"
+    t.integer  "choices_count",      default: 0
+    t.integer  "votes_count",        default: 0
   end
 
   add_index "polls", ["author_id"], name: "index_polls_on_author_id", using: :btree
@@ -73,6 +77,7 @@ ActiveRecord::Schema.define(version: 20140620125049) do
     t.string   "phone_number"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "votes_count",  default: 0
   end
 
   create_table "votes", force: true do |t|

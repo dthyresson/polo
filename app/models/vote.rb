@@ -1,7 +1,7 @@
 class Vote < ActiveRecord::Base
-  belongs_to :voter
-  belongs_to :poll
-  belongs_to :choice
+  belongs_to :voter, counter_cache: true
+  belongs_to :poll, counter_cache: true
+  belongs_to :choice, counter_cache: true
 
   def self.find_by_short_url(hashid)
     id = HASHIDS.decrypt(hashid)

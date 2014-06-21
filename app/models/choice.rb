@@ -1,5 +1,5 @@
 class Choice < ActiveRecord::Base
-  belongs_to :poll
+  belongs_to :poll, counter_cache: true
   has_many :votes
   has_many :voters, through: :votes
   has_many :authors, through: :poll
