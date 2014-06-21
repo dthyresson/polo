@@ -27,7 +27,7 @@ describe "Poll API GET" do
     get '/v1/polls.json', nil, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
 
     json = JSON.parse(response.body)
     expect(json.length).to eq(10)
@@ -42,7 +42,7 @@ describe "Poll API GET" do
     get "/v1/polls/#{poll.id}.json", nil, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to_not have_json_path("poll/choices/0/choice/title")
@@ -56,7 +56,7 @@ describe "Poll API GET" do
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(forbidden_author.device_id) }
     get "/v1/polls/#{poll.id}.json", nil, headers
-    expect(response.response_code).to eq(403)
+    expect(response.status).to eq(403)
   end
 
   it 'gets my poll with choices' do
@@ -68,7 +68,7 @@ describe "Poll API GET" do
     get "/v1/polls/#{poll.id}.json", nil, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0")
@@ -84,7 +84,7 @@ describe "Poll API GET" do
     get "/v1/polls/#{poll.id}.json", nil, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0")
@@ -109,7 +109,7 @@ describe "Poll API POST" do
     post "/v1/polls/", poll_json, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
 
@@ -131,7 +131,7 @@ describe "Poll API POST" do
     post "/v1/polls/", poll_json, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/photo_url_original")
 
@@ -150,7 +150,7 @@ describe "Poll API POST" do
     post "/v1/polls/", poll_json, headers
 
     expect(response).to be_success
-    expect(response.response_code).to eq(200)
+    expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/votes")
