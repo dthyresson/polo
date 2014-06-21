@@ -64,15 +64,16 @@ describe "Show Vote" do
     question = "Do you forgive me?"
     poll = create :yes_no_poll_with_uncast_votes, question: question
     vote = poll.votes.first
+    choice = poll.choices.first
 
-    vote.cast!(poll.choices.first)
+    vote.cast!(choice)
 
     visit_vote_by_short_url vote.short_url
 
     expect(page).to have_content(poll.author_name)
     expect(page).to have_content(question)
-    expect(page).to have_content(poll.choices.first.title)
-    expect(page).to_not have_link(poll.choices.first.title)
+    expect(page).to have_content(choice.title)
+    expect(page).to_not have_link(choice.title)
   end
 end
 

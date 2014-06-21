@@ -50,6 +50,7 @@ group :test do
   gem 'formulaic'
   gem 'launchy'
   gem 'shoulda-matchers', require: false
+  gem 'simplecov', require: false
   gem 'timecop'
   gem 'webmock'
 end
