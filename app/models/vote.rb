@@ -21,7 +21,7 @@ class Vote < ActiveRecord::Base
   end
 
   def cast!(choice)
-    update_attributes({choice: choice})
+    update_attributes({ choice: choice, cast_at: Time.zone.now })
   end
 
   def cast?

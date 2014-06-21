@@ -37,6 +37,7 @@ describe Vote, "#cast!" do
     vote.cast!(yes_choice)
 
     expect(vote).to be_cast
+    expect(vote.cast_at).to be_present
     expect(vote.choice).to eq(yes_choice)
   end
 end
@@ -46,6 +47,8 @@ describe Vote, "#cast?" do
     poll = create :yes_no_poll_with_uncast_votes
     vote = poll.votes.first
     vote.cast!(poll.choices.first)
+
+    expect(vote.cast_at).to be_present
     expect(vote).to be_cast
   end
 end

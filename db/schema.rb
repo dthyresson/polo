@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621110304) do
+ActiveRecord::Schema.define(version: 20140621110602) do
 
   create_table "authors", force: true do |t|
     t.string   "name"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20140621110304) do
     t.integer  "choice_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "cast_at"
   end
 
   add_index "votes", ["choice_id"], name: "index_votes_on_choice_id", using: :btree
