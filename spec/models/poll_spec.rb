@@ -1,0 +1,123 @@
+require 'spec_helper'
+
+describe Poll, "associations" do
+  it { should belong_to :author }
+  it { should have_many :choices }
+  it { should have_many(:votes)}
+  it { should have_many(:voters).through(:votes) }
+end
+
+describe Poll, "validations" do
+  it { should validate_presence_of :question}
+  it { should accept_nested_attributes_for :choices }
+end
+
+describe Poll, "photo attachment validations" do
+  it { should have_attached_file(:photo) }
+  it { should validate_attachment_content_type(:photo).
+                allowing('image/png', 'image/gif', 'image/jpeg').
+                rejecting('text/plain', 'text/xml') }
+  it { should validate_attachment_size(:photo).
+                in(0..2.megabytes) }
+end
+
+describe Poll, "#to_builder" do
+  it "renders json" do
+    poll = create :poll
+    expect(poll.to_builder).to have_json_path("poll/question")
+  end
+end
+
+describe Poll, ".for_author" do
+  it "should return polls for the authoring person" do
+    marco = create :author
+    polo = create :author
+    solo = create :author
+
+    create_list(:poll, 10, author: marco)
+    create_list(:poll, 3, author: polo)
+
+    expect(Poll.for_author(marco).count).to eq(10)
+    expect(Poll.for_author(polo).count).to eq(3)
+    expect(Poll.for_author(solo).count).to eq(0)
+  end
+end
+
+describe Poll, ".in_progress" do
+  it "should return open polls" do
+
+    create_list(:open_poll, 5)
+    create_list(:closed_poll, 3)
+
+    expect(Poll.in_progress.count).to eq(5)
+  end
+end
+
+describe Poll, ".ended" do
+  it "should return closed polls" do
+    create_list(:open_poll, 5)
+    create_list(:closed_poll, 3)
+
+    expect(Poll.ended.count).to eq(3)
+  end
+end
+
+describe Poll, "#end!" do
+  it "should close the poll" do
+    open_poll = create(:open_poll)
+    expect(open_poll.in_progress?).to be_true
+    expect(open_poll.over?).to be_false
+
+    open_poll.end!
+
+    expect(open_poll.over?).to be_true
+  end
+end
+
+describe Poll, "#publish_to_voter_phone_numbers" do
+  it "should create voters and votes for a set of phone numbers" do
+    poll = create(:yes_no_poll)
+    phone_numbers = ["16175551212", "12125551212", "12025551212"]
+
+    poll.publish_to_voter_phone_numbers(phone_numbers)
+
+    expect(Voter.count).to eq(3)
+    expect(Vote.count).to eq(3)
+    expect(poll.votes.count).to eq(3)
+    expect(Voter.all.map(&:phone_number)).to match_array(phone_numbers)
+  end
+end
+
+describe Poll, "#author_name" do
+  it "provides the name of the poll author" do
+    author_name = "Bob"
+    author = create :author, name: author_name
+    poll = create(:poll, author: author)
+    expect(poll.author_name).to eq(author_name)
+  end
+end
+
+describe Poll, "#author_device_id" do
+  it "provides the device of the poll author" do
+    author = create :author_with_device
+    author_device_id = author.device_id
+    poll = create(:poll, author: author)
+    expect(poll.author_device_id).to eq(author_device_id)
+  end
+end
+
+describe Poll, "#photo_url" do
+  context "when poll lacks a photo" do
+    it "the photo url is empty" do
+      poll = create :yes_no_poll
+      expect(poll.photo_url(:medium)).to be_nil
+    end
+  end
+
+  context "when poll has an uploaded photo" do
+    it "uses their photo" do
+      poll = create :yes_no_poll_with_photo
+      expect(poll.photo_url(:medium)).to eq(poll.photo.url(:medium))
+    end
+  end
+end
