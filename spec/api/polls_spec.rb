@@ -110,8 +110,6 @@ describe "Poll API POST" do
     poll = Poll.last
     expect(poll).to be
     expect(poll.choices.count).to eq(2)
-    # expect(poll.author).to eq(author)
-    # expect(poll.author.device_id).to eq(author.device_id)
   end
 
   it "creates a post with a photo and question" do

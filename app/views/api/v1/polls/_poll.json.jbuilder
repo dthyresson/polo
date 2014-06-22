@@ -40,7 +40,6 @@ json.poll do
 
   json.votes poll.votes do |vote|
     json.vote do
-      json.voter_id vote.voter_id
       json.voter_phone_number vote.voter_phone_number
       json.short_url vote.short_url
       json.choice_title vote.choice.title if vote.cast?
