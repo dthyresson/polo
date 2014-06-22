@@ -14,5 +14,4 @@ class ApiController < ApplicationController
       @device = Device.find_by({ device_id: token })
     end
   end
-
 end

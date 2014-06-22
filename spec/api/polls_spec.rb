@@ -11,7 +11,6 @@ describe "Poll API GET" do
     get '/v1/polls.json', nil, headers
 
     expect(response).to_not be_success
-
   end
 
   it "gets a list of my polls" do
