@@ -133,7 +133,9 @@ describe "Poll API POST" do
     expect(response).to be_success
     expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
-    expect(response.body).to have_json_path("poll/photo_url_original")
+    expect(response.body).to have_json_path("poll/photo_url/original")
+    expect(response.body).to have_json_path("poll/photo_url/medium")
+    expect(response.body).to have_json_path("poll/photo_url/thumb")
 
     poll_with_photo = Poll.last
     expect(poll.photo_url(:medium)).to eq(poll.photo.url(:medium))
