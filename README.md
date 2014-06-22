@@ -216,9 +216,9 @@ Question and Photo
             "name": "Marco Polo"
           },
           "photo_url": {
-            "original": "\/system\/polls\/photos\/000\/000\/003\/original\/marco-polo-600x450.jpg?1403459623",
-            "medium": "\/system\/polls\/photos\/000\/000\/003\/medium\/marco-polo-600x450.jpg?1403459623",
-            "thumb": "\/system\/polls\/photos\/000\/000\/003\/thumb\/marco-polo-600x450.jpg?1403459623"
+            "original": "/system/polls/photos/000/000/003/original/marco-polo-600x450.jpg?1403459623",
+            "medium": "/system/polls/photos/000/000/003/medium/marco-polo-600x450.jpg?1403459623",
+            "thumb": "/system/polls/photos/000/000/003/thumb/marco-polo-600x450.jpg?1403459623"
           },
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
@@ -332,6 +332,72 @@ Question only
           ]
         }
       }
+    ]
+
+Photo Only
+----------
+
+    [
+        {
+            "poll": {
+                "author": {
+                    "name": "Marco Polo"
+                },
+                "photo_url": {
+                    "original": "/system/polls/photos/000/000/003/original/marco-polo-600x450.jpg?1403459623",
+                    "medium": "/system/polls/photos/000/000/003/medium/marco-polo-600x450.jpg?1403459623",
+                    "thumb": "/system/polls/photos/000/000/003/thumb/marco-polo-600x450.jpg?1403459623"
+                },
+                "votes_cast_count": 1,
+                "votes_remaining_count": 2,
+                "is_closed": false,
+                "top_choice": {
+                    "title": "Yes",
+                    "votes_count": 1,
+                    "popularity": 1,
+                    "popularity_percentage": "100%"
+                },
+                "choices": [
+                    {
+                        "choice": {
+                            "title": "No",
+                            "votes_count": 0,
+                            "popularity": 0,
+                            "popularity_percentage": "0%"
+                        }
+                    },
+                    {
+                        "choice": {
+                            "title": "Yes",
+                            "votes_count": 1,
+                            "popularity": 1,
+                            "popularity_percentage": "100%"
+                        }
+                    }
+                ],
+                "votes": [
+                    {
+                        "vote": {
+                            "voter_phone_number": "12125550003",
+                            "short_url": "2PQqPQ"
+                        }
+                    },
+                    {
+                        "vote": {
+                            "voter_phone_number": "12025550004",
+                            "short_url": "YEwoED"
+                        }
+                    },
+                    {
+                        "vote": {
+                            "voter_phone_number": "16175550002",
+                            "short_url": "YPZeE6",
+                            "choice_title": "Yes"
+                        }
+                    }
+                ]
+            }
+        }
     ]
 
 Builder
