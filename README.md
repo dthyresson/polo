@@ -37,9 +37,19 @@ and have the lastest libtool
 
 Be sure to setup environment variables for Twilio
 
-    export TWILIO_ACCOUNT_SID="AC2fbca92207334e45a5dedbe414bec340"
-    export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14ba2d91"
-    export TWILIO_PHONE_NUMBER="+16174010664"
+    export TWILIO_ACCOUNT_SID="AC2fbca92xxxxxxe45a5dedbe414bec340"
+    export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
+    export TWILIO_PHONE_NUMBER="+16175555555"
+
+Sample .env file
+----------------
+
+    export SECRET_KEY_BASE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+    export TWILIO_ACCOUNT_SID="AC2fbca92xxxxxxe45a5dedbe414bec340"
+    export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
+    export TWILIO_PHONE_NUMBER="+16175555555"
+
 
 Guidelines
 ----------
@@ -54,12 +64,12 @@ programming in style.
 Models
 ======
 
-* Poll - Asks a question or shows photo, presents choices and has people cast votes for their choice 
-* Choice - An option with a title such as "Yes" or "No"
-* Author - Creates a poll for people to vote on. They have a device id.
-* Device - Represents the author and an id identifying their mobile phone
-* Voter - Casts a vote for a choice
-* Votes - Belong to a single voter and a poll. It contains their choice.
+* **Poll** - Asks a question or shows photo, presents choices and has people cast votes for their choice 
+* **Choice** - An option with a title such as "Yes" or "No"
+* **Author** - Creates a poll for people to vote on. They have a device id.
+* **Device** - Represents the author and an id identifying their mobile phone
+* **Voter** - Casts a vote for a choice
+* **Vote** - Belong to a single voter and a poll. It contains their choice.
 
 Cardinality
 -----------
@@ -195,7 +205,7 @@ Create a New Poll
 
     post "/v1/polls/", poll_json, headers
 
-Where poll_json is the JSON as referenced before in API Requests, such as: Create Poll with Question.
+Where poll_json is the JSON as referenced below in API Requests, such as: Create Poll with Question.
 
 Close One of My Polls
 ---------------------
@@ -545,3 +555,15 @@ Account Info
 
 TODO Message ...
 
+Testing
+=======
+
+Run 
+
+    rake
+
+to execute intergration and feature tests of the API, models, and web interaction.
+
+All tests and fixtures used can be found in the ``spec`` directory.
+
+SimpleCOV is used and generates a code coverage report.
