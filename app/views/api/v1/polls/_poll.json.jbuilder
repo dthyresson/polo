@@ -22,21 +22,21 @@ json.cache! poll do
     end
 
     json.choices ChoiceDecorator.decorate_collection(poll.choices) do |choice|
-        json.choice do
-          json.title choice.title
-          json.votes_count choice.votes.count
-          json.popularity choice.popularity
-          json.popularity_percentage choice.to_percentage
-        end
-     end
+      json.choice do
+        json.title choice.title
+        json.votes_count choice.votes.count
+        json.popularity choice.popularity
+        json.popularity_percentage choice.to_percentage
+      end
+    end
 
     json.votes poll.votes do |vote|
-        json.vote do
-          json.voter_id vote.voter_id
-          json.voter_phone_number vote.voter_phone_number
-          json.short_url vote.short_url
-          json.choice_title vote.choice.title if vote.cast?
-        end
-     end
+      json.vote do
+        json.voter_id vote.voter_id
+        json.voter_phone_number vote.voter_phone_number
+        json.short_url vote.short_url
+        json.choice_title vote.choice.title if vote.cast?
+      end
+    end
   end
 end
