@@ -66,9 +66,9 @@ class Api::V1::PollsController < ApiController
     params.require(:poll).permit( :author_name,
                                   :author_device_id,
                                   :question,
-                                  {:phone_numbers => []},
                                   :photo,
-                                 {:choices_attributes => [:title]} )
+                                 {:choices_attributes => [:title]},
+                                 {:phone_numbers => []} )
 
   end
 end
