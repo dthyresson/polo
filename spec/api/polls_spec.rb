@@ -91,7 +91,7 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/choices/0/choice/title")
     expect(response.body).to have_json_path("poll/votes")
     expect(response.body).to have_json_path("poll/votes/0")
-    expect(response.body).to have_json_path("poll/votes/0/vote/voter_id")
+    expect(response.body).to have_json_path("poll/votes/0/vote/short_url")
   end
 end
 
