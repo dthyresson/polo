@@ -1,4 +1,6 @@
 class Api::V1::VotesController < ApiController
+  before_action :authenticate
+
   def show
     @vote = Vote.find(params[:id])
   end

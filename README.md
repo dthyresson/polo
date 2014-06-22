@@ -217,6 +217,9 @@ The content type should be image/png, image/jpeg etc.
 
 The endcoded data should be strictly encoded with no \n within or at the end of the data.
 
+Polls
+------
+
 Get My Polls
 ------------
 
@@ -239,10 +242,19 @@ Close One of My Polls
 
     put "/v1/polls/#{poll.id}/close.json", nil, headers
 
+Votes
+-----
+
+A Vote API has built in the event that a user may cast a vote via the mobile app, but is not complete.
+
+For example, a Voter would need to have a Device register to be an authorized user.
+
+Also, data securty would need to be added to the API VotesController to ensure that a voter can view and update only their votes.
+
 JSON Examples
 =============
 
-Reponses
+Responses
 --------
 
 Question and Photo
