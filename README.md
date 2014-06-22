@@ -27,11 +27,11 @@ Be sure to create a secret_key_base environment variable
 
 in your ``.env`` file.
 
-Be sure to install ImageMagick
+Be sure to install ImageMagick for Paperclip photo attachments.
 
     brew install imagemagick
 
-and have the lastest libtool
+and have the lastest libtool since Paperclip require this.
 
     brew install libtool
 
@@ -41,10 +41,22 @@ Be sure to setup environment variables for Twilio
     export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
     export TWILIO_PHONE_NUMBER="+16175555555"
 
+Be sure to setup environment variables for creating the hashid for the vote short_url
+
+    export HASHID_MINIMUM_LENGTH=6
+    export HASHID_SALT="MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
+
+Note that all but ``SECRET_KEY_BASE`` will default to certain values, but can be overidden by environment settings.
+
 Sample .env file
 ----------------
 
+You can setup a ``.env`` file for these variable settings.
+
     export SECRET_KEY_BASE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+    export HASHID_MINIMUM_LENGTH=6
+    export HASHID_SALT="MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
 
     export TWILIO_ACCOUNT_SID="AC2fbca92xxxxxxe45a5dedbe414bec340"
     export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
@@ -99,11 +111,18 @@ This is performed by calling
 
     @poll.delay.publish_to_voters
 
-using Delayed Jonb to queue up sending each SMS.
+using Delayed Job to queue up sending each SMS.
 
 A vote belongs to a specific voter and is identified by a short_url hashid. This hashid is used to view the vote in a browser such as
 
     /votes/MEgvV4
+
+Hashids are based on the vote's id and hashed according to the settings in the `config/initializers/hashids.rb` initializer.
+
+    HASHID_MINIMUM_LENGTH = ENV['HASHID_MINIMUM_LENGTH'] || 6
+    HASHID_SALT = ENV['HASHID_SALT'] || "MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
+
+The length and salt used can be changed via environments variables.
 
 When a vote is cast, a voter cannot change their vote. 
 
@@ -550,10 +569,38 @@ A voter clicks on a choice to cast their vote.
 Twilio
 ======
 
+Polo uses the [twilio-ruby](https://github.com/twilio/twilio-ruby) for communicating with the Twilio API gem to send text messages (SMS).
+
+The account phone number is used to send messages with the following body to each phone number saved to the poll.
+
+    TWILIO.account.messages.create(
+      from: TWILIO_PHONE_NUMBER,
+      to: phone_number,
+      body: "#{author_name} wants to know, \"#{question}\""
+    )
+
+This call is fond within the `publish_to_voters` method on a poll which should be called as a DelayedJob. 
+
 Account Info
 -------------
 
 TODO Message ...
+
+Deployment
+===========
+
+Heroku
+-------
+
+When deploying to Heroku, will need to setup the necessary environment values as Heroku config settings.
+
+Procfile
+--------
+
+    web: bundle exec unicorn -p $PORT -c ./config/unicorn.rb
+    worker: bundle exec rake jobs:work
+
+A worker needs to be running in order to process DelyaedJobs to send a SMS  to Twilio.
 
 Testing
 =======
