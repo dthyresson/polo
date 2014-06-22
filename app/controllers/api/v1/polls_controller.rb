@@ -8,11 +8,7 @@ class Api::V1::PollsController < ApiController
   end
 
   def create
-    poll_author = author
-
-    @poll = Poll.new(poll_params)
-
-    @poll.author = poll_author
+    @poll = Poll.new(poll_params_with_author_info)
 
     if @poll.save
       unless Rails.env.test?
@@ -44,21 +40,29 @@ class Api::V1::PollsController < ApiController
     params[:poll][:phone_numbers]
   end
 
+  def device
+    device_id = params[:poll][:author_device_id]
+    params[:poll].delete :author_device_id
+    @device ||= Device.find_or_create_by({ device_id: device_id })
+  end
+
   def author
     name = params[:poll][:author_name]
-    device_id = params[:poll][:author_device_id]
-
     params[:poll].delete :author_name
-    params[:poll].delete :author_device_id
 
-    device = Device.find_or_create_by({ device_id: device_id })
-    author = device.author || Author.create({name: name})
-    if device.author
-      author.update_attributes({name: name})
+    if device
+      device.author.update_attributes({name: name})
+      device.author
     else
-      device.update_attribute({author: author})
+      device_author = Author.create({name: name})
+      device.update_attribute({author: device_author})
+      device_author
     end
-    author
+  end
+
+  def poll_params_with_author_info
+    poll_author = author
+    poll_params.merge({ author: poll_author })
   end
 
   def poll_params
