@@ -148,10 +148,10 @@ In the HTTP request, the following headers are
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
 
-for example:
+for example, this is a rendered header (note the missing HTTP_):
 
-    CONTENT_TYPE => application/json 
-    HTTP_AUTHORIZATION => Token token="58b722db8ae281907e8da73cb9bb1cb5d996f759"
+    CONTENT_TYPE:application/json 
+    AUTHORIZATION:Token token="58b722db8ae281907e8da73cb9bb1cb5d996f759"
 
 If a request is Unauthorized, the response will include a Forbidden 403 HTTP response status code.
 
@@ -270,6 +270,8 @@ Question and Photo
         }
       }
     ]
+
+Note: when in staging or production, photo urls may change to be publically available full urls on a CDN such as Cloudinary.
 
 Question only
 --------------
