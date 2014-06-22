@@ -4,7 +4,9 @@ json.cache! poll do
       json.name poll.author_name
     end
 
-    json.question poll.question
+    if poll.has_question?
+      json.question poll.question
+    end
 
     if poll.has_photo?
       json.photo_url do
