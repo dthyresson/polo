@@ -620,7 +620,7 @@ Procfile
     web: bundle exec unicorn -p $PORT -c ./config/unicorn.rb
     worker: bundle exec rake jobs:work
 
-A worker needs to be running in order to process DelyaedJobs to send a SMS  to Twilio.
+A worker needs to be running in order to process DelayedJobs to send a SMS  to Twilio.
 
 Testing
 =======
