@@ -166,19 +166,58 @@ describe "Poll API POST" do
 end
 
 describe "Poll API PUT to close" do
-  xit 'closes my poll' do
-    author = create :author
+  it 'closes my poll' do
+    author = create :author_with_device
     poll = create(:poll, author: author)
     choices = create_list(:choice, 2, poll: poll)
 
     expect(poll).to be_in_progress
 
-    put "/v1/polls/#{poll.id}/close.json"
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
+    put "/v1/polls/#{poll.id}/close.json", nil, headers
 
+    expect(response.status).to eq(200)
     poll = Poll.last
     expect(poll).to be_over
   end
 
-  xit "will not close someone else's poll" do
+  it "will not close someone else's poll" do
+    someone_else = create :author_with_device
+
+    author = create :author_with_device
+    poll = create(:poll, author: author)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to be_in_progress
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(someone_else.device_id) }
+
+    put "/v1/polls/#{poll.id}/close.json", nil, headers
+
+    expect(response.status).to eq(403)
+    poll = Poll.last
+    expect(poll).to be_in_progress
   end
+
+  it "is unauthorized if try to close with a bad device id" do
+    bad_device_id = SecureRandom.hex(20)
+
+    author = create :author_with_device
+    poll = create(:poll, author: author)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to be_in_progress
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(bad_device_id) }
+
+    put "/v1/polls/#{poll.id}/close.json", nil, headers
+
+    expect(response.status).to eq(401)
+    poll = Poll.last
+    expect(poll).to be_in_progress
+  end
+
 end

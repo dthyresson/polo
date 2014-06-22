@@ -3,8 +3,13 @@ class Api::V1::PollsController < ApiController
 
   def close
     @poll = Poll.find(params[:id])
-    @poll.end!
-    render :show
+
+    if @poll.author == current_user
+      @poll.end!
+      render :show
+    else
+      render :json => { :errors => "Forbidden"}, status: 403
+    end
   end
 
   def create
