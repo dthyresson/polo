@@ -634,3 +634,15 @@ to execute intergration and feature tests of the API, models, and web interactio
 All tests and fixtures used can be found in the ``spec`` directory.
 
 SimpleCOV is used and generates a code coverage report.
+
+TODO
+====
+
+TODO
+
+* Finalize SMS message copy (question, photo, question/photo cases)
+* How to present a tied vote?
+* Markup and style web view to cast vote
+* Determine photo transform styles (300x300 etc)
+* Where to store/host images. On S3? $$$ associated with this.
+* What happens if invalid Twilio phone number? Delete vote? Intersect phone numbers on poll with voter numbers to show author who never got asked?
