@@ -16,11 +16,7 @@ class Api::V1::PollsController < ApiController
     @poll = Poll.new(poll_params_with_author_info)
 
     if @poll.save
-      unless Rails.env.test?
-        @poll.publish_to_voter_phone_numbers(phone_numbers)
-      else
-        @poll.delay.publish_to_voter_phone_numbers(phone_numbers)
-      end
+      @poll.delay.publish_to_voters
       render :create
     else
       render :json => { :errors => @poll.errors.full_messages }
@@ -40,10 +36,6 @@ class Api::V1::PollsController < ApiController
   end
 
   private
-
-  def phone_numbers
-    params[:poll][:phone_numbers]
-  end
 
   def device
     device_id = params[:poll][:author_device_id]
@@ -74,6 +66,7 @@ class Api::V1::PollsController < ApiController
     params.require(:poll).permit( :author_name,
                                   :author_device_id,
                                   :question,
+                                  {:phone_numbers => []},
                                   :photo,
                                  {:choices_attributes => [:title]} )
 

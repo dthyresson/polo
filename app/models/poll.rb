@@ -82,7 +82,7 @@ class Poll < ActiveRecord::Base
     votes_cast_count == votes.count
   end
 
-  def publish_to_voter_phone_numbers(phone_numbers = [])
+  def publish_to_voters
     if phone_numbers.present?
       phone_numbers.each do |phone_number|
         voter = Voter.find_or_create_by({phone_number: phone_number})
@@ -118,29 +118,6 @@ class Poll < ActiveRecord::Base
     top_choices = choices.by_popularity.take(2)
     top_choices.map(&:popularity).uniq.size == 1
   end
-
-  # def to_builder(phone_numbers = nil)
-
-  #   filename = "/Users/dthyresson/projects/polo/spec/fixtures/profile.png"
-  #   image = File.read(filename)
-  #   data = Base64.strict_encode64(image)
-  #   uri  = "data:image/png;base64,#{data}"
-
-  #   Jbuilder.encode do |json|
-  #     json.poll do
-  #       json.author_name self.author_name
-  #       json.author_device_id self.author_device_id
-  #       json.question self.question
-  #       json.choices_attributes self.choices do |choice|
-  #         json.title choice.title
-  #       end
-  #       if phone_numbers.present?
-  #         json.phone_numbers phone_numbers
-  #       end
-  #       json.photo uri
-  #     end
-  #   end
-  # end
 
   private
 

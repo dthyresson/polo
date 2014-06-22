@@ -73,13 +73,6 @@ describe Poll, "#has_question" do
   end
 end
 
-describe Poll, "#to_builder" do
-  it "renders json" do
-    poll = create :poll
-    expect(poll.to_builder).to have_json_path("poll/question")
-  end
-end
-
 describe Poll, ".for_author" do
   it "should return polls for the authoring person" do
     marco = create :author
@@ -126,12 +119,12 @@ describe Poll, "#end!" do
   end
 end
 
-describe Poll, "#publish_to_voter_phone_numbers" do
+describe Poll, "#publish_to_voters" do
   it "should create voters and votes for a set of phone numbers" do
-    poll = create(:yes_no_poll)
     phone_numbers = ["16175551212", "12125551212", "12025551212"]
+    poll = create(:yes_no_poll_with_phone_numbers, phone_numbers: phone_numbers)
 
-    poll.publish_to_voter_phone_numbers(phone_numbers)
+    poll.publish_to_voters
 
     expect(Voter.count).to eq(3)
     expect(Vote.count).to eq(3)

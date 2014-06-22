@@ -18,6 +18,10 @@ FactoryGirl.define do
         create(:no_choice, poll: poll, popularity: 0)
       end
 
+      factory :yes_no_poll_with_phone_numbers do
+        phone_numbers ["16175551212", "12125551212", "12025551212"]
+      end
+
       factory :yes_no_poll_with_photo do
         before(:create) do |poll, evaluator|
           poll.photo = File.new(File.expand_path("spec/fixtures/marco-polo-600x450.jpg"))

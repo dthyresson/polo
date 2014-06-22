@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621110602) do
+ActiveRecord::Schema.define(version: 20140622141455) do
 
   create_table "authors", force: true do |t|
     t.string   "name"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20140621110602) do
     t.datetime "closed_at"
     t.integer  "choices_count",      default: 0
     t.integer  "votes_count",        default: 0
+    t.string   "phone_numbers",      default: [], array: true
   end
 
   add_index "polls", ["author_id"], name: "index_polls_on_author_id", using: :btree
