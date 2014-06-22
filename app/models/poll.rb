@@ -24,6 +24,10 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def has_photo?
+    photo.present?
+  end
+
   def self.for_author(author)
     where("author_id = ?", author.id)
   end
@@ -46,10 +50,6 @@ class Poll < ActiveRecord::Base
 
   def end!
     update_attributes({ closed_at: Time.zone.now })
-  end
-
-  def has_photo?
-    photo.present?
   end
 
   def has_question?

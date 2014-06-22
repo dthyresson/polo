@@ -1,11 +1,17 @@
 json.cache! poll do
   json.poll do
+    json.author do
+      json.name poll.author_name
+    end
+
     json.question poll.question
 
-    json.photo_url do
-      json.original poll.photo_url(:original)
-      json.medium poll.photo_url(:medium)
-      json.thumb poll.photo_url(:thumb)
+    if poll.has_photo?
+      json.photo_url do
+        json.original poll.photo_url(:original)
+        json.medium poll.photo_url(:medium)
+        json.thumb poll.photo_url(:thumb)
+      end
     end
 
     json.votes_cast_count poll.votes_cast_count
