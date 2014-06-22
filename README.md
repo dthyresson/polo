@@ -69,7 +69,7 @@ Models
 * **Author** - Creates a poll for people to vote on. They have a device id.
 * **Device** - Represents the author and an id identifying their mobile phone
 * **Voter** - Casts a vote for a choice
-* **Vote** - Belong to a single voter and a poll. It contains their choice.
+* **Vote** - Belongs to a single voter and a poll. It contains their choice.
 
 Cardinality
 -----------
