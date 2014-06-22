@@ -195,6 +195,8 @@ Create a New Poll
 
     post "/v1/polls/", poll_json, headers
 
+Where poll_json is the JSON as referenced before in API Requests, such as: Create Poll with Question.
+
 Close One of My Polls
 ---------------------
 
