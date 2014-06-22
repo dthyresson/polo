@@ -55,12 +55,12 @@ class Api::V1::PollsController < ApiController
     name = params[:poll][:author_name]
     params[:poll].delete :author_name
 
-    if device
-      device.author.update_attributes({name: name})
+    if device.author.present?
+      device.author.update_attribute(:name, name)
       device.author
     else
       device_author = Author.create({name: name})
-      device.update_attribute({author: device_author})
+      device.update_attribute(:author, device_author)
       device_author
     end
   end

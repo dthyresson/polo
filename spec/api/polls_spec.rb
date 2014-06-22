@@ -121,11 +121,7 @@ describe "Poll API POST" do
   end
 
   it "creates a post with a photo and question" do
-    # should change to use fixture json
-
-    poll = create :yes_no_poll_with_photo
-
-    poll_json = poll.to_builder
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question_and_photo.json"))
 
     headers = { 'CONTENT_TYPE' => 'application/json' }
     post "/v1/polls/", poll_json, headers
@@ -133,12 +129,18 @@ describe "Poll API POST" do
     expect(response).to be_success
     expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
+    expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/photo_url/original")
     expect(response.body).to have_json_path("poll/photo_url/medium")
     expect(response.body).to have_json_path("poll/photo_url/thumb")
 
     poll_with_photo = Poll.last
-    expect(poll.photo_url(:medium)).to eq(poll.photo.url(:medium))
+
+    expect(poll_with_photo.author_name).to eq("Britney Lee")
+    expect(poll_with_photo.question).to eq("Will you go out with me?")
+    expect(poll_with_photo.choices.map(&:title)).to match_array(["Yes", "No"])
+    expect(poll_with_photo).to have_photo
+    expect(poll_with_photo.photo_url(:medium)).to eq(poll_with_photo.photo.url(:medium))
   end
 
   xit "creates a post with 5 voter phone numbers" do

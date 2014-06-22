@@ -119,28 +119,28 @@ class Poll < ActiveRecord::Base
     top_choices.map(&:popularity).uniq.size == 1
   end
 
-  def to_builder(phone_numbers = nil)
+  # def to_builder(phone_numbers = nil)
 
-    filename = "/Users/dthyresson/Dropbox/Photos/me/david_expos_bigwheel_180x180.jpeg"
-    image = File.read(filename)
-    data = Base64.strict_encode64(image)
-    uri  = "data:image/jpeg;base64,#{data}"
+  #   filename = "/Users/dthyresson/projects/polo/spec/fixtures/profile.png"
+  #   image = File.read(filename)
+  #   data = Base64.strict_encode64(image)
+  #   uri  = "data:image/png;base64,#{data}"
 
-    Jbuilder.encode do |json|
-      json.poll do
-        json.author_name self.author_name
-        json.author_device_id self.author_device_id
-        json.question self.question
-        json.choices_attributes self.choices do |choice|
-          json.title choice.title
-        end
-        if phone_numbers.present?
-          json.phone_numbers phone_numbers
-        end
-        json.photo uri
-      end
-    end
-  end
+  #   Jbuilder.encode do |json|
+  #     json.poll do
+  #       json.author_name self.author_name
+  #       json.author_device_id self.author_device_id
+  #       json.question self.question
+  #       json.choices_attributes self.choices do |choice|
+  #         json.title choice.title
+  #       end
+  #       if phone_numbers.present?
+  #         json.phone_numbers phone_numbers
+  #       end
+  #       json.photo uri
+  #     end
+  #   end
+  # end
 
   private
 

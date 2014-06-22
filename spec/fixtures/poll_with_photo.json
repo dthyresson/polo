@@ -1,0 +1,16 @@
+{
+  "poll":{
+    "author_name":"Britney Lee",
+    "author_device_id":"5f5b566bd39b39ad764ee74516e298d8783128c2",
+    "choices_attributes":[
+      {
+        "title":"Yes"
+      },
+      {
+        "title":"No"
+      }
+    ],
+    "phone_numbers":["16175551212", "12125551212", "12025551212"],
+    "photo":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+  }
+}
