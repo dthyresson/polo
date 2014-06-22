@@ -203,6 +203,9 @@ Close One of My Polls
 JSON Examples
 =============
 
+Reponses
+--------
+
 Question and Photo
 ------------------
 
