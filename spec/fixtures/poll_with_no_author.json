@@ -1,0 +1,13 @@
+{
+  "poll":{
+    "question":"Will you go out with me?",
+    "choices_attributes":[
+      {
+        "title":"Yes"
+      },
+      {
+        "title":"No"
+      }
+    ]
+  }
+}

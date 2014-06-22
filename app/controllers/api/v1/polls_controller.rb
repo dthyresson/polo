@@ -19,7 +19,7 @@ class Api::V1::PollsController < ApiController
       @poll.delay.publish_to_voters
       render :create
     else
-      render :json => { :errors => @poll.errors.full_messages }
+      render :json => { :errors => @poll.errors.full_messages }, status: 422
     end
   end
 

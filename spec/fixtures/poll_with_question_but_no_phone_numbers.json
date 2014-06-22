@@ -1,0 +1,15 @@
+{
+  "poll":{
+    "author_name":"Britney Lee",
+    "author_device_id":"5f5b566bd39b39ad764ee74516e298d8783128c2",
+    "question":"Will you go out with me?",
+    "choices_attributes":[
+      {
+        "title":"Yes"
+      },
+      {
+        "title":"No"
+      }
+    ]
+  }
+}

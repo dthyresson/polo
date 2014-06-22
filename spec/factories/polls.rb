@@ -5,6 +5,7 @@ FactoryGirl.define do
     author
     question "Should I travel through Asia?"
     photo nil
+    phone_numbers ["16175551212", "12125551212", "12025551212"]
     closed_at nil
 
     factory :closed_poll do

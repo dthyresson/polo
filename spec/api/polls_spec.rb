@@ -4,7 +4,7 @@ describe "Poll API GET" do
   it "returns no polls if you are not the author" do
     bad_device_id = SecureRandom.hex(20)
     author = create :author_with_device
-    create_list(:poll, 10, author: author)
+    create_list(:yes_no_poll, 10, author: author)
 
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(bad_device_id) }
@@ -16,10 +16,10 @@ describe "Poll API GET" do
 
   it "gets a list of my polls" do
     author = create :author_with_device
-    create_list(:poll, 10, author: author)
+    create_list(:yes_no_poll, 10, author: author)
 
     another_author = create :author_with_device
-    create_list(:poll, 2, author: another_author)
+    create_list(:yes_no_poll, 2, author: another_author)
 
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
@@ -35,7 +35,7 @@ describe "Poll API GET" do
 
   it 'gets one of my polls' do
     author = create :author_with_device
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
 
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
@@ -45,13 +45,13 @@ describe "Poll API GET" do
     expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
-    expect(response.body).to_not have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/choices/0/choice/title")
   end
 
   it "is forbidden to get someone else's poll" do
     forbidden_author = create :author_with_device
     author = create :author_with_device
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
 
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(forbidden_author.device_id) }
@@ -112,7 +112,7 @@ describe "Poll API POST" do
     expect(poll.choices.count).to eq(2)
   end
 
-  it "creates a post with a photo and question" do
+  it "creates a poll with a photo and question" do
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question_and_photo.json"))
 
     headers = { 'CONTENT_TYPE' => 'application/json' }
@@ -135,7 +135,7 @@ describe "Poll API POST" do
     expect(poll_with_photo.photo_url(:medium)).to eq(poll_with_photo.photo.url(:medium))
   end
 
-  it "creates a post with voter phone numbers" do
+  it "creates a poll with voter phone numbers" do
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question.json"))
 
     headers = { 'CONTENT_TYPE' => 'application/json' }
@@ -155,12 +155,52 @@ describe "Poll API POST" do
     expect(poll.votes.count).to eq(3)
     expect(Voter.all.map(&:phone_number)).to match_array(["16175551212", "12125551212", "12025551212"])
   end
+
+  it "cannot create a poll without phone numbers" do
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question_but_no_phone_numbers.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response.status).to eq(422)
+    expect(parse_json(response.body)['errors']).to include("Phone numbers can't be blank")
+  end
+
+  it "cannot create a poll without a question or a photo" do
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_no_question_or_photo.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response.status).to eq(422)
+    expect(parse_json(response.body)['errors']).to include("Need to ask a question or show a photo")
+  end
+
+  xit "cannot create a poll without choices" do
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_no_choices.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response.status).to eq(422)
+    expect(parse_json(response.body)['errors']).to include("Choices can't be blank")
+  end
+
+  it "cannot create a poll without an author" do
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_no_author.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response.status).to eq(422)
+    expect(parse_json(response.body)['errors']).to include("Author name can't be blank")
+  end
 end
 
 describe "Poll API PUT to close" do
   it 'closes my poll' do
     author = create :author_with_device
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
     choices = create_list(:choice, 2, poll: poll)
 
     expect(poll).to be_in_progress
@@ -178,7 +218,7 @@ describe "Poll API PUT to close" do
     someone_else = create :author_with_device
 
     author = create :author_with_device
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
     choices = create_list(:choice, 2, poll: poll)
 
     expect(poll).to be_in_progress
@@ -197,7 +237,7 @@ describe "Poll API PUT to close" do
     bad_device_id = SecureRandom.hex(20)
 
     author = create :author_with_device
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
     choices = create_list(:choice, 2, poll: poll)
 
     expect(poll).to be_in_progress

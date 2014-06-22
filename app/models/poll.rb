@@ -4,6 +4,9 @@ class Poll < ActiveRecord::Base
   has_many :votes
   has_many :voters, through: :votes
 
+  validates_presence_of :author
+  validates_presence_of :phone_numbers
+
   has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" },
                                          :default_url => "/images/:style/missing.png"
   process_in_background :photo
@@ -123,7 +126,7 @@ class Poll < ActiveRecord::Base
 
   def has_question_or_photo?
     unless has_question? or has_photo?
-      errors.add(:base, "Need a to ask a question or show a photo.")
+      errors.add(:base, "Need to ask a question or show a photo")
     end
   end
 end

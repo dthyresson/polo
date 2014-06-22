@@ -9,6 +9,8 @@ end
 
 describe Poll, "validations" do
   it { should accept_nested_attributes_for :choices }
+  it { should validate_presence_of :phone_numbers }
+  it { should validate_presence_of :author }
 end
 
 describe Poll, "photo attachment validations" do
@@ -51,24 +53,24 @@ describe Poll, "#has_photo" do
   end
 
   it "checks that the poll photo is there" do
-    poll = create :poll, photo: nil
+    poll = create :yes_no_poll, photo: nil
     expect(poll).to_not have_photo
   end
 end
 
 describe Poll, "#has_question" do
   it "checks if there is a poll question text" do
-    poll = build :poll, question: "Do you forgive me?"
+    poll = build :yes_no_poll, question: "Do you forgive me?"
     expect(poll).to have_question
   end
 
   it "checks that the poll question text is not blank" do
-    poll = build :poll, question: ""
+    poll = build :yes_no_poll, question: ""
     expect(poll).to_not have_question
   end
 
   it "checks that the poll question text is there" do
-    poll = build :poll, question: nil
+    poll = build :yes_no_poll, question: nil
     expect(poll).to_not have_question
   end
 end
@@ -79,8 +81,8 @@ describe Poll, ".for_author" do
     polo = create :author
     solo = create :author
 
-    create_list(:poll, 10, author: marco)
-    create_list(:poll, 3, author: polo)
+    create_list(:yes_no_poll, 10, author: marco)
+    create_list(:yes_no_poll, 3, author: polo)
 
     expect(Poll.for_author(marco).count).to eq(10)
     expect(Poll.for_author(polo).count).to eq(3)
@@ -137,7 +139,7 @@ describe Poll, "#author_name" do
   it "provides the name of the poll author" do
     author_name = "Bob"
     author = create :author, name: author_name
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
     expect(poll.author_name).to eq(author_name)
   end
 end
@@ -146,7 +148,7 @@ describe Poll, "#author_device_id" do
   it "provides the device of the poll author" do
     author = create :author_with_device
     author_device_id = author.device_id
-    poll = create(:poll, author: author)
+    poll = create(:yes_no_poll, author: author)
     expect(poll.author_device_id).to eq(author_device_id)
   end
 end
