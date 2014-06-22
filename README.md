@@ -124,6 +124,14 @@ Hashids are based on the vote's id and hashed according to the settings in the `
 
 The length and salt used can be changed via environments variables.
 
+**Important** If you change the HASHID_MINIMUM_LENGTH value, you will need to adjust the route constraints to match:
+    
+    Rails.application.routes.draw do
+      ...
+      get '/:short_url', to: 'votes#show', as: "vote_short_url", constraints: { short_url: /[a-zA-Z0-9]{6}/ }
+      ...
+    end
+
 When a vote is cast, a voter cannot change their vote. 
 
 Based on vote count, the popularity and winning/leading choice is determined in quantity (number of votes) and percentage.
@@ -579,7 +587,7 @@ The account phone number is used to send messages with the following body to eac
       body: "#{author_name} wants to know, \"#{question}\""
     )
 
-This call is fond within the `publish_to_voters` method on a poll which should be called as a DelayedJob. 
+This call is found within the `publish_to_voters` method on a poll which should be called as a DelayedJob. 
 
 Account Info
 -------------
