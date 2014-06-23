@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Poll API GET" do
-  it "returns no polls if you are not the author" do
+  it "returns unauthorized if you pass an invalid authorization token" do
     bad_device_id = SecureRandom.hex(20)
     author = create :author_with_device
     create_list(:yes_no_poll, 10, author: author)
@@ -11,7 +11,22 @@ describe "Poll API GET" do
     get '/v1/polls.json', nil, headers
 
     expect(response).to_not be_success
+    expect(response.status).to eq(401)
   end
+
+  it "returns no polls if you haven't authored any polls" do
+    author_without_polls = create :author_with_device
+    author = create :author_with_device
+    create_list(:yes_no_poll, 10, author: author)
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author_without_polls.device_id) }
+    get '/v1/polls.json', nil, headers
+
+    expect(response).to be_success
+    expect(response.body).to eq("[]")
+  end
+
 
   it "gets a list of my polls" do
     author = create :author_with_device
