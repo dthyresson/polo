@@ -21,6 +21,12 @@ After setting up, you can run the application using [foreman]:
 Environment 
 -----------
 
+It is **highly recommended** to have a development machine setup that uses this [laptop](https://github.com/thoughtbot/laptop) script.
+
+It contains [just about everything](https://github.com/thoughtbot/laptop) you'll need to get going.
+
+In addition:
+
 Be sure to create a secret_key_base environment variable 
 
     % export SECRET_KEY_BASE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -646,3 +652,4 @@ TODO
 * Determine photo transform styles (300x300 etc)
 * Where to store/host images. On S3? $$$ associated with this.
 * What happens if invalid Twilio phone number? Delete vote? Intersect phone numbers on poll with voter numbers to show author who never got asked?
+
