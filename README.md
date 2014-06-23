@@ -624,6 +624,20 @@ The account phone number is used to send messages with the following body to eac
 
 This call is found within the `publish_to_voters` method on a poll which should be called as a DelayedJob. 
 
+Testing and WebMock
+-------------------
+
+All requests to Twilio as stubbed so as to not attempt to post to the API whilest running tests.
+
+See `spec_helper`:
+
+    config.before(:each) do
+      stub_request(:post, "https://#{TWILIO_ACCOUNT_SID}:4ae82bb084f1d99cf7b6c82c14baxxxx@api.twilio.com/2010-04-01/Accounts/AC2fbca92xxxxxxe45a5dedbe414bec340/Messages.json").
+        with(headers: {'Accept'=>'application/json', 'Accept-Charset'=>'utf-8', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'twilio-ruby/3.11.5 (true/x86_64-darwin13.0 2.1.2-p95)'}).
+        to_return(:status => 200, :body => "", :headers => {})
+    end
+
+
 PollNotifier
 -----------
 

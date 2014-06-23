@@ -10,18 +10,19 @@ class PollNotifier < Object
 
   def send_sms(phone_number)
     return unless @poll.present?
-    unless Rails.env.test?
-      begin
-        TWILIO.account.messages.create(
-          from: TWILIO_PHONE_NUMBER,
-          to: phone_number,
-          body: "#{author_name} wants to know, \"#{question}\""
-        )
-      rescue Twilio::REST::RequestError => e
-        # send this to airbrake?
-        # delete the vote and remove the phone number?
-        puts e.message
-      end
+    return unless phone_number.present?
+    begin
+      TWILIO.account.messages.create(
+        from: TWILIO_PHONE_NUMBER,
+        to: phone_number,
+        body: "#{author_name} wants to know, \"#{question}\""
+      )
+    rescue Twilio::REST::RequestError => e
+      # send this to airbrake?
+      # delete the vote and remove the phone number?
+      puts e.message
+    rescue => e
+      # just eat it. eat it. eat it.
     end
   end
 end
