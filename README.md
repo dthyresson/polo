@@ -12,6 +12,8 @@ This repository comes equipped with a self-setup script:
 
     % ./bin/setup
 
+This will install all gems, create and seed the database needed.
+
 After setting up, you can run the application using [foreman]:
 
     % foreman start
@@ -59,14 +61,14 @@ Sample .env file
 
 You can setup a ``.env`` file for these variable settings.
 
-    export SECRET_KEY_BASE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    SECRET_KEY_BASE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-    export HASHID_MINIMUM_LENGTH=6
-    export HASHID_SALT="MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
+    HASHID_MINIMUM_LENGTH=6
+    HASHID_SALT="MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
 
-    export TWILIO_ACCOUNT_SID="AC2fbca92xxxxxxe45a5dedbe414bec340"
-    export TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
-    export TWILIO_PHONE_NUMBER="+16175555555"
+    TWILIO_ACCOUNT_SID="AC2fbca92xxxxxxe45a5dedbe414bec340"
+    TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
+    TWILIO_PHONE_NUMBER="+16175555555"
 
 
 Guidelines
