@@ -197,7 +197,9 @@ for example, this is a rendered header (note the missing HTTP_):
     CONTENT_TYPE:application/json 
     AUTHORIZATION:Token token="58b722db8ae281907e8da73cb9bb1cb5d996f759"
 
-If a request is Unauthorized, the response will include a Forbidden 403 HTTP response status code.
+If a request is Unauthorized, the response be a 401 Unauthorized.
+
+If you are authorized, but cannot view or update the poll/vote, it will include a Forbidden 403 HTTP response status code together with a collection of error messages.
 
 JSON API
 ========
@@ -209,9 +211,10 @@ The API is a versioned namespace. The current version is "v1".
 Reponse Status Codes
 --------------------
 
-* If the request succeeds, the response with have a status code of 200.
-* If the request is unauthorized, the response with have a status code of 403.
-* If the request fails for validation reasons, the response with have a status * code of 422 and the body with contain a list of error messages.
+* If the request succeeds, the response will have a status code of **200**.
+* If the request is unauthorized, the response will have a status code of **401**.
+* If you try to access a poll/vote that you do not own or have permission to modify, the response will hvae a stats code of **403**.
+* If the request fails for validation reasons, the response will have a status code of **422** and the body will contain a list of error messages.
 
 Photos
 ------
