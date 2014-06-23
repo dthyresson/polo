@@ -150,7 +150,7 @@ When a poll is closed, it can no longer be voted on.
 Photos
 ------
 
-A poll can have a photo that is saved via Paperclip as an attachment.
+A poll can have a photo that is saved via [Paperclip](https://github.com/thoughtbot/paperclip) as an attachment.
 
 When a photo is saved, the original is kept and two other styles: medium and thumb are created.
 
