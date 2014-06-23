@@ -2,7 +2,12 @@
 
 FactoryGirl.define do
   factory :vote do
-    voter 
-    choice 
+    voter
+    choice
+    notified_at nil
+
+    factory :notified_vote do
+      notified_at { Time.zone.now }
+    end
   end
 end

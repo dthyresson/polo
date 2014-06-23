@@ -40,6 +40,32 @@ FactoryGirl.define do
             create(:vote, poll: poll, voter: dc_voter, choice: nil)
           end
         end
+
+        factory :yes_no_poll_with_notified_voters do
+          after(:create) do |poll, evaluator|
+            boston_voter = create :boston_voter
+            create(:notified_vote, poll: poll, voter: boston_voter, choice: nil)
+
+            nyc_voter = create :nyc_voter
+            create(:notified_vote, poll: poll, voter: nyc_voter, choice: nil)
+
+            dc_voter = create :dc_voter
+            create(:notified_vote, poll: poll, voter: dc_voter, choice: nil)
+          end
+        end
+
+        factory :yes_no_poll_with_some_notified_voters do
+          after(:create) do |poll, evaluator|
+            boston_voter = create :boston_voter
+            create(:notified_vote, poll: poll, voter: boston_voter, choice: nil)
+
+            nyc_voter = create :nyc_voter
+            create(:vote, poll: poll, voter: nyc_voter, choice: nil)
+
+            dc_voter = create :dc_voter
+            create(:notified_vote, poll: poll, voter: dc_voter, choice: nil)
+          end
+        end
       end
 
       factory :yes_no_poll_with_uncast_votes do

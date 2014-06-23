@@ -322,3 +322,26 @@ describe Poll, "#tied?" do
     expect(poll).to be_tied
   end
 end
+
+describe Poll, "#notified_voters" do
+  it "returns a list of voters who have been notifed to vote" do
+    poll = create :yes_no_poll_with_notified_voters
+    voters = poll.voters
+    expect(poll.notified_voters).to match_array(voters)
+  end
+end
+
+describe Poll, "#notified_voters_count" do
+  it "counts how many voters have been notifed to vote" do
+    poll = create :yes_no_poll_with_notified_voters
+    expect(poll.notified_voters_count).to eq(3)
+  end
+end
+
+describe Poll, "#notified_phone_numbers" do
+  it "returns a list of voter phone_numbers that have been sent notificatons to vote" do
+    poll = create :yes_no_poll_with_some_notified_voters
+    expect(poll.notified_voters_count).to eq(2)
+    expect(poll.notified_phone_numbers).to match_array(["16175550002", "12025550004"])
+  end
+end

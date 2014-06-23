@@ -186,3 +186,41 @@ describe Vote, ".cast_count" do
     expect(Vote.cast_count).to eq(2)
   end
 end
+
+describe Vote, ".notified" do
+  it "returns only those votes whose voters have been notified (ie, via sms)" do
+    notified_votes = create_list(:notified_vote, 2)
+    vote = create :vote
+
+    expect(Vote.notified).to match_array(notified_votes)
+  end
+end
+
+describe Vote, "#notify!" do
+  it "marks the vote to indicate that the voter has been notified" do
+    vote = create :vote
+    vote.notify!
+    expect(vote).to be_notified
+  end
+end
+
+describe Vote, "#notified?" do
+  it "determines that the voter has not been notified" do
+    vote = create :vote
+    expect(vote).to_not be_notified
+  end
+
+  it "determines if the voter has been notified" do
+    vote = create :notified_vote
+    expect(vote).to be_notified
+  end
+end
+
+describe Vote, "phone_number" do
+  it "returns the phone_number of the voter" do
+    phone_number = "14155551212"
+    voter = create :voter, phone_number: phone_number
+    vote = create :vote, voter: voter
+    expect(vote.phone_number).to eq(phone_number)
+  end
+end

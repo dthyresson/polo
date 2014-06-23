@@ -8,16 +8,16 @@ class Vote < ActiveRecord::Base
     Vote.find(id).first
   end
 
+  def short_url
+    HASHIDS.encrypt(self.id)
+  end
+
   def self.cast
     where("choice_id is not null")
   end
 
   def self.cast_count
     self.cast.count
-  end
-
-  def short_url
-    HASHIDS.encrypt(self.id)
   end
 
   def cast!(choice)
@@ -48,4 +48,21 @@ class Vote < ActiveRecord::Base
     return false if cast?
     true
   end
+
+  def self.notified
+    where("notified_at is not null")
+  end
+
+  def notify!
+    update_attribute(:notified_at, Time.zone.now)
+  end
+
+  def notified?
+    notified_at.present?
+  end
+
+  def phone_number
+    voter.phone_number
+  end
+
 end

@@ -67,6 +67,18 @@ class Poll < ActiveRecord::Base
     not in_progress?
   end
 
+  def notified_voters
+    votes.includes(:voter).notified.map(&:voter)
+  end
+
+  def notified_voters_count
+    notified_voters.size
+  end
+
+  def notified_phone_numbers
+    notified_voters.map(&:phone_number)
+  end
+
   def votes_cast_count
     votes.cast_count
   end
@@ -89,8 +101,8 @@ class Poll < ActiveRecord::Base
     if phone_numbers.present?
       phone_numbers.each do |phone_number|
         voter = Voter.find_or_create_by({phone_number: phone_number})
-        Vote.find_or_create_by({voter: voter, poll: self})
-        PollNotifier.new(self).send_sms(phone_number)
+        vote = Vote.find_or_create_by({voter: voter, poll: self})
+        PollNotifier.new(self).send_sms(vote)
       end
     end
   end

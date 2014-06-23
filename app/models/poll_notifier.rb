@@ -8,8 +8,10 @@ class PollNotifier < Object
     @question = poll.question
   end
 
-  def send_sms(phone_number)
+  def send_sms(vote)
     return unless @poll.present?
+    return unless vote.present?
+    phone_number = vote.phone_number
     return unless phone_number.present?
     begin
       TWILIO.account.messages.create(
@@ -17,6 +19,7 @@ class PollNotifier < Object
         to: phone_number,
         body: "#{author_name} wants to know, \"#{question}\""
       )
+      vote.notify!
     rescue Twilio::REST::RequestError => e
       # send this to airbrake?
       # delete the vote and remove the phone number?

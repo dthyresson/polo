@@ -285,6 +285,10 @@ Question and Photo
             "medium": "/system/polls/photos/000/000/003/medium/marco-polo-600x450.jpg?1403459623",
             "thumb": "/system/polls/photos/000/000/003/thumb/marco-polo-600x450.jpg?1403459623"
           },
+          "notified_voters_count": 1,
+          "notified_phone_numbers": [
+            "16175550002"
+          ],          
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
@@ -315,23 +319,26 @@ Question and Photo
           "votes": [
             {
               "vote": {
-                "voter_phone_number": "16175550002",
                 "short_url": "YPZeE6",
-                "is_cast": false
+                "voter_phone_number": "16175550002",
+                "is_cast": false,
+                "is_notified": true                
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12125550003",
                 "short_url": "2PQqPQ",
-                "is_cast": false
+                "is_cast": false,
+                "is_notified": false                
               }
             },
             {
               "vote": {
-                "voter_phone_number": "12025550004",
+                "voter_phone_number": "16172304800",
                 "short_url": "YEwoED",
-                "is_cast": false
+                "is_cast": false,
+                "is_notified": true                
               }
             }
           ]
@@ -351,6 +358,10 @@ Question only
             "name": "Marco Polo"
           },
           "question": "Do you forgive me?",
+          "notified_voters_count": 3,
+          "notified_phone_numbers": [
+              "16175550002", "12125550003", "12025550004"
+          ],
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
@@ -383,21 +394,24 @@ Question only
               "vote": {
                 "voter_phone_number": "16175550002",
                 "short_url": "MEgvV4",
-                "is_cast": false
+                "is_cast": false,
+                "is_notified": true
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12125550003",
                 "short_url": "eV9LOX",
-                "is_cast": false
+                "is_cast": false,
+                "is_notified": true
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12025550004",
                 "short_url": "qPvxV6",
-                "is_cast": false
+                "is_cast": false,
+                "is_notified": true
               }
             }
           ]
@@ -419,6 +433,10 @@ Photo Only
                     "medium": "/system/polls/photos/000/000/003/medium/marco-polo-600x450.jpg?1403459623",
                     "thumb": "/system/polls/photos/000/000/003/thumb/marco-polo-600x450.jpg?1403459623"
                 },
+                "notified_voters_count": 3,
+                "notified_phone_numbers": [
+                    "16175550002", "12125550003", "12025550004"
+                ],
                 "votes_cast_count": 1,
                 "votes_remaining_count": 2,
                 "is_closed": false,
@@ -451,14 +469,16 @@ Photo Only
                         "vote": {
                             "voter_phone_number": "12125550003",
                             "short_url": "2PQqPQ",
-                            "is_cast": false
+                            "is_cast": false,
+                            "is_notified": true
                         }
                     },
                     {
                         "vote": {
                             "voter_phone_number": "12025550004",
                             "short_url": "YEwoED",
-                            "is_cast": false
+                            "is_cast": false,
+                            "is_notified": true
                         }
                     },
                     {
@@ -466,6 +486,7 @@ Photo Only
                             "voter_phone_number": "16175550002",
                             "short_url": "YPZeE6",
                             "is_cast": true,
+                            "is_notified": true",
                             "choice_title": "Yes"
                         }
                     }
@@ -477,9 +498,10 @@ Photo Only
 Builder
 -------
 
-See _poll.json.jbuilder in app/views/polls for the structure.
+See `_poll.json.jbuilder` in `app/views/polls` for the structure.
 
     json.poll do
+      json.id poll.id
       json.author do
         json.name poll.author_name
       end
@@ -521,7 +543,9 @@ See _poll.json.jbuilder in app/views/polls for the structure.
       json.votes poll.votes do |vote|
         json.vote do
           json.voter_phone_number vote.voter_phone_number
+          json.is_notified vote.notified?
           json.short_url vote.short_url
+          json.is_cast vote.cast?
           json.choice_title vote.choice.title if vote.cast?
         end
       end
@@ -643,13 +667,15 @@ PollNotifier
 
 The  `PollNotifier` is responsible for sending a SMS to a phone number.
 
-It takes a `poll` and a `phone_number`.
+It takes a `poll` and a `vote`. The `phone_number` is dervied from the `Voter` on the `vote`.
 
-    PollNotifier.new(poll).send_sms(phone_number)
+    PollNotifier.new(poll).send_sms(vote)
 
 and sends the message to the phone using Twilio's API.
 
-This way you can swap the notification method -- or even add more -- without modifying Poll.
+If a `phone_number` is successfully messaged, the `vote` will be marked `notified` and the JSON payload will include that `is_notified` flag as well as a `notified_voters_count` and the actual list of `notified_phone_numbers`.
+
+Down the road, if you need to you can swap the notification method -- or even add more -- without modifying Poll.
 
 Also, you could use `PollNotifier` to re-notify all the phone_numbers on the poll.
 
