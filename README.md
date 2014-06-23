@@ -641,6 +641,12 @@ All tests and fixtures used can be found in the ``spec`` directory.
 
 SimpleCOV is used and generates a code coverage report.
 
+You can also run in a DRb server for faster testing via
+
+    guard
+
+See Guardfile and spec_helper for details.
+
 TODO
 ====
 
