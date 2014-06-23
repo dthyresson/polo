@@ -312,19 +312,22 @@ Question and Photo
             {
               "vote": {
                 "voter_phone_number": "16175550002",
-                "short_url": "YPZeE6"
+                "short_url": "YPZeE6",
+                "is_cast": false
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12125550003",
-                "short_url": "2PQqPQ"
+                "short_url": "2PQqPQ",
+                "is_cast": false
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12025550004",
-                "short_url": "YEwoED"
+                "short_url": "YEwoED",
+                "is_cast": false
               }
             }
           ]
@@ -375,19 +378,22 @@ Question only
             {
               "vote": {
                 "voter_phone_number": "16175550002",
-                "short_url": "MEgvV4"
+                "short_url": "MEgvV4",
+                "is_cast": false
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12125550003",
-                "short_url": "eV9LOX"
+                "short_url": "eV9LOX",
+                "is_cast": false
               }
             },
             {
               "vote": {
                 "voter_phone_number": "12025550004",
-                "short_url": "qPvxV6"
+                "short_url": "qPvxV6",
+                "is_cast": false
               }
             }
           ]
@@ -440,19 +446,22 @@ Photo Only
                     {
                         "vote": {
                             "voter_phone_number": "12125550003",
-                            "short_url": "2PQqPQ"
+                            "short_url": "2PQqPQ",
+                            "is_cast": false
                         }
                     },
                     {
                         "vote": {
                             "voter_phone_number": "12025550004",
-                            "short_url": "YEwoED"
+                            "short_url": "YEwoED",
+                            "is_cast": false
                         }
                     },
                     {
                         "vote": {
                             "voter_phone_number": "16175550002",
                             "short_url": "YPZeE6",
+                            "is_cast": true,
                             "choice_title": "Yes"
                         }
                     }

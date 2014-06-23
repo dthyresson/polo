@@ -1,5 +1,6 @@
 
 json.poll do
+  json.id poll.id
   json.author do
     json.name poll.author_name
   end
@@ -42,6 +43,7 @@ json.poll do
     json.vote do
       json.voter_phone_number vote.voter_phone_number
       json.short_url vote.short_url
+      json.is_cast vote.cast?
       json.choice_title vote.choice.title if vote.cast?
     end
   end

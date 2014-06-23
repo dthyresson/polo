@@ -1,4 +1,4 @@
-491class Api::V1::PollsController < ApiController
+class Api::V1::PollsController < ApiController
   before_action :authenticate, except: [ :create ]
 
   def close

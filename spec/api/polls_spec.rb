@@ -27,7 +27,6 @@ describe "Poll API GET" do
     expect(response.body).to eq("[]")
   end
 
-
   it "gets a list of my polls" do
     author = create :author_with_device
     create_list(:yes_no_poll, 10, author: author)
@@ -57,6 +56,7 @@ describe "Poll API GET" do
 
     expect(response).to be_success
     expect(response.status).to eq(200)
+    expect(response.body).to have_json_path("poll/id")
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0/choice/title")
@@ -107,7 +107,32 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/votes/0")
     expect(response.body).to have_json_path("poll/votes/0/vote/short_url")
   end
+
+  it 'gets my poll with cast votes' do
+    author = create :author_with_device
+    poll = create(:yes_no_poll_with_uncast_votes, author: author)
+
+    vote = poll.votes.first
+    vote.cast!(poll.choices.first)
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
+    get "/v1/polls/#{poll.id}.json", nil, headers
+
+    expect(response).to be_success
+    expect(response.status).to eq(200)
+    expect(response.body).to have_json_path("poll/question")
+    expect(response.body).to have_json_path("poll/choices")
+    expect(response.body).to have_json_path("poll/choices/0")
+    expect(response.body).to have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/votes")
+    expect(response.body).to have_json_path("poll/votes/0")
+    expect(response.body).to have_json_path("poll/votes/0/vote/short_url")
+    expect(response.body).to have_json_path("poll/votes/0/vote/is_cast")
+    expect(response.body).to include("\"is_cast\":true")
+  end
 end
+
 
 describe "Poll API POST" do
   it 'creates a new open poll with two choices' do
@@ -190,6 +215,17 @@ describe "Poll API POST" do
     expect(parse_json(response.body)['errors']).to include("Need to ask a question or show a photo")
   end
 
+  xit "cannot create a poll with too large an image" do
+    # this fixture may be silly
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_3MB_image.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response.status).to eq(422)
+    expect(parse_json(response.body)['errors']).to include("Choices can't be blank")
+  end
+
   xit "cannot create a poll without choices" do
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_no_choices.json"))
 
@@ -265,5 +301,5 @@ describe "Poll API PUT to close" do
     poll = Poll.last
     expect(poll).to be_in_progress
   end
-
 end
+
