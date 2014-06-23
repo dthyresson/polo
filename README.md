@@ -70,7 +70,6 @@ You can setup a ``.env`` file for these variable settings.
     TWILIO_AUTH_TOKEN="4ae82bb084f1d99cf7b6c82c14baxxxx"
     TWILIO_PHONE_NUMBER="+16175555555"
 
-
 Guidelines
 ----------
 
@@ -105,7 +104,7 @@ Cardinality
 Poll
 ----
 
-A poll asks a question or shows a photo. It must have one or the other; it can also choice both a question and photo.
+A poll asks a question or shows a photo. It must have one or the other; it can also have both a question and photo.
 
 A poll has many choices. There is no limit to the number of choices, but a poll should have two choices with titles, typically "Yes" or "No". However, the choice title can be any text, such as "Red" or "Black". Poll choices are ordered reverse alphabetically by title so that "Yes" comes before "No".
 
@@ -172,7 +171,7 @@ TODO: AWS??
 Authorization
 ------------
 
-Most API calls need to be authorized so that auhtors can only access their polls and close only polls they own.
+Most API calls need to be authorized so that authors can only access their polls and close only polls they own.
 
 You should not be able to get, view or close a poll you do not own.
 
