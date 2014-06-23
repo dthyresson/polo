@@ -135,6 +135,10 @@ end
 
 describe "Poll API POST" do
   it 'creates a new open poll with two choices' do
+
+    stub_request(:post, "https://AC2fbca92xxxxxxe45a5dedbe414bec340:4ae82bb084f1d99cf7b6c82c14baxxxx@api.twilio.com/2010-04-01/Accounts/AC2fbca92xxxxxxe45a5dedbe414bec340/Messages.json").
+                 to_return(:status => 200, :body => "", :headers => {})
+
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question.json"))
 
     headers = { 'CONTENT_TYPE' => 'application/json' }

@@ -90,13 +90,18 @@ class Poll < ActiveRecord::Base
       phone_numbers.each do |phone_number|
         voter = Voter.find_or_create_by({phone_number: phone_number})
         Vote.create({voter: voter, poll: self})
-
         unless Rails.env.test?
-          TWILIO.account.messages.create(
-            from: TWILIO_PHONE_NUMBER,
-            to: phone_number,
-            body: "#{author_name} wants to know, \"#{question}\""
-          )
+          begin
+            TWILIO.account.messages.create(
+              from: TWILIO_PHONE_NUMBER,
+              to: phone_number,
+              body: "#{author_name} wants to know, \"#{question}\""
+            )
+          rescue Twilio::REST::RequestError => e
+            # send this to airbrake?
+            # delete the vote and remove the phone number?
+            puts e.message
+          end
         end
       end
     end
