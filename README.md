@@ -154,7 +154,7 @@ A poll can have a photo that is saved via Paperclip as an attachment.
 
 When a photo is saved, the original is kept and two other styles: medium and thumb are created.
 
-Photos are currnetly limited to 2MB in size.
+Photos are **currently limited to 2MB** in size. **BUT** I think this is way too big. I think that the Android client should reduce the filesize to a reasonable size to post (in the few 100k range).
 
 A poll will include urls to these photo locations:
 
@@ -226,6 +226,10 @@ Photo image data should be Base64 encoded in a data uri.
 The content type should be image/png, image/jpeg etc.
 
 The endcoded data should be strictly encoded with no \n within or at the end of the data.
+
+Photos are **currently limited to 2MB** in size. **BUT** I think this is way too big.
+
+Consider **reducing the size on the client** and posting something in the several 100k range to be reasonable.
 
 Polls
 ------

@@ -216,6 +216,7 @@ describe "Poll API POST" do
 
   xit "cannot create a poll with too large an image" do
     # this fixture may be silly
+    # will revist when a final image attachment size is determined
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_3MB_image.json"))
 
     headers = { 'CONTENT_TYPE' => 'application/json' }
