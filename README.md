@@ -197,7 +197,7 @@ for example, this is a rendered header (note the missing HTTP_):
     CONTENT_TYPE:application/json 
     AUTHORIZATION:Token token="58b722db8ae281907e8da73cb9bb1cb5d996f759"
 
-If a request is Unauthorized, the response be a 401 Unauthorized.
+If a request is Unauthorized, the response will be 401 Unauthorized.
 
 If you are authorized, but cannot view or update the poll/vote, it will include a Forbidden 403 HTTP response status code together with a collection of error messages.
 
