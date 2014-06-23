@@ -624,6 +624,23 @@ The account phone number is used to send messages with the following body to eac
 
 This call is found within the `publish_to_voters` method on a poll which should be called as a DelayedJob. 
 
+PollNotifier
+-----------
+
+The  `PollNotifier` is responsible for sending a SMS to a phone number.
+
+It takes a `poll` and a `phone_number`.
+
+    PollNotifier.new(poll).send_sms(phone_number)
+
+and sends the message to the phone using Twilio's API.
+
+This way you can swap the notification method -- or even add more -- without modifying Poll.
+
+Also, you could use `PollNotifier` to re-notify all the phone_numbers on the poll.
+
+For usage, see `Poll.publish_to_voters`.
+
 Account Info
 -------------
 
