@@ -17,7 +17,7 @@ class PollNotifier < Object
       TWILIO.account.messages.create(
         from: TWILIO_PHONE_NUMBER,
         to: phone_number,
-        body: "#{author_name} wants to know, \"#{question}\""
+        body: "#{author_name} wants to know, \"#{question}\nVote now! http://www.example.com/#{vote.short_url}\""
       )
       vote.notify!
     rescue Twilio::REST::RequestError => e
