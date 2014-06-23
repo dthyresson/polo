@@ -133,7 +133,6 @@ describe "Poll API GET" do
   end
 end
 
-
 describe "Poll API POST" do
   it 'creates a new open poll with two choices' do
     poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_question.json"))
