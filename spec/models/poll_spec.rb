@@ -90,13 +90,24 @@ describe Poll, ".for_author" do
   end
 end
 
+describe Poll, ".recent" do
+  it "should return open polls" do
+    polls = create_list(:poll, 2)
+    older_polls = create_list(:poll_from_yast_year, 5)
+
+    expect(Poll.recent.count).to eq(2)
+    expect(Poll.recent).to match_array(polls)
+  end
+end
+
 describe Poll, ".in_progress" do
   it "should return open polls" do
 
-    create_list(:open_poll, 5)
-    create_list(:closed_poll, 3)
+    open_polls = create_list(:open_poll, 5)
+    closed_polls = create_list(:closed_poll, 3)
 
     expect(Poll.in_progress.count).to eq(5)
+    expect(Poll.in_progress).to match_array(open_polls)
   end
 end
 

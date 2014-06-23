@@ -12,6 +12,12 @@ FactoryGirl.define do
       closed_at { Time.zone.now }
     end
 
+    factory :poll_from_yast_year do
+      after(:create) do |poll, evaluator|
+        poll.update_attribute(:created_at, 1.year.ago)
+      end
+    end
+
     factory :yes_no_poll do
       author factory: :author_with_device
       after(:create) do |poll, evaluator|

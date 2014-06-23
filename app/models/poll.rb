@@ -39,8 +39,24 @@ class Poll < ActiveRecord::Base
     where("closed_at is not null")
   end
 
+  def end!
+    update_attributes({ closed_at: Time.zone.now })
+  end
+
+  def over?
+    not in_progress?
+  end
+
   def self.in_progress
     where("closed_at is null")
+  end
+
+  def in_progress?
+    closed_at.nil?
+  end
+
+  def self.recent
+    where("created_at >= ?", 2.weeks.ago)
   end
 
   def author_name
@@ -51,20 +67,8 @@ class Poll < ActiveRecord::Base
     author.device_id
   end
 
-  def end!
-    update_attributes({ closed_at: Time.zone.now })
-  end
-
   def has_question?
     question.present?
-  end
-
-  def in_progress?
-    closed_at.nil?
-  end
-
-  def over?
-    not in_progress?
   end
 
   def notified_voters
@@ -100,8 +104,8 @@ class Poll < ActiveRecord::Base
   def publish_to_voters
     if phone_numbers.present?
       phone_numbers.each do |phone_number|
-        voter = Voter.find_or_create_by({phone_number: phone_number})
-        vote = Vote.find_or_create_by({voter: voter, poll: self})
+        voter = Voter.find_or_create_by({ phone_number: phone_number })
+        vote = Vote.find_or_create_by({ voter: voter, poll: self })
         PollNotifier.new(self).send_sms(vote)
       end
     end
@@ -113,7 +117,7 @@ class Poll < ActiveRecord::Base
                       if not tied?
                         top
                       else
-                        Choice.new({title: "Tied", popularity: top.popularity})
+                        Choice.new({ title: "Tied", popularity: top.popularity })
                       end
                     end
   end
@@ -130,7 +134,7 @@ class Poll < ActiveRecord::Base
   private
 
   def has_question_or_photo?
-    unless has_question? or has_photo?
+    unless has_question? || has_photo?
       errors.add(:base, "Need to ask a question or show a photo")
     end
   end
