@@ -55,6 +55,10 @@ class Poll < ActiveRecord::Base
     closed_at.nil?
   end
 
+  def self.ordered
+    order("updated_at desc")
+  end
+
   def self.recent
     where("created_at >= ?", 2.weeks.ago)
   end

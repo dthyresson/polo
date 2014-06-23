@@ -90,8 +90,26 @@ describe Poll, ".for_author" do
   end
 end
 
+describe Poll, ".ordered" do
+  it "should have newer polls come before older ones based on when last updated" do
+    polls = create_list(:poll, 3)
+
+    oldest_poll = Poll.second
+    oldest_poll.update_attribute(:updated_at, 2.months.ago)
+
+    middle_poll = Poll.last
+    middle_poll.update_attribute(:updated_at, 1.months.ago)
+
+    most_recent_poll = Poll.first
+    most_recent_poll.update_attribute(:updated_at, 1.hour.ago)
+
+    expect(Poll.ordered.count).to eq(3)
+    expect(Poll.ordered).to eq([most_recent_poll, middle_poll, oldest_poll])
+  end
+end
+
 describe Poll, ".recent" do
-  it "should return open polls" do
+  it "should return recently created polls" do
     polls = create_list(:poll, 2)
     older_polls = create_list(:poll_from_yast_year, 5)
 
