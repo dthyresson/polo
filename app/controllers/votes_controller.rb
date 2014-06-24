@@ -1,6 +1,9 @@
 class VotesController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   def show
     @vote = Vote.find_by_short_url(params[:short_url])
+
     @poll = @vote.poll
     @choices = @poll.choices.ordered
     @choice = @vote.choice
