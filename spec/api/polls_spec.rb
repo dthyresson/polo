@@ -308,3 +308,96 @@ describe "Poll API PUT to close" do
   end
 end
 
+describe "Poll API pagination" do
+  it "returns a default of 10 polls per page when no page reqeusted" do
+    device_author = create :author_with_device
+    20.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json', nil, headers
+
+    polls = parse_json(response.body)
+
+    expect(response.headers['Link']).to_not be_empty
+    expect(polls.size).to eq(10)
+  end
+
+  it "returns 10 polls per page when a page is reqeusted" do
+    device_author = create :author_with_device
+    20.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json?page=1', nil, headers
+
+    polls = parse_json(response.body)
+
+    expect(response.headers['Link']).to_not be_empty
+    expect(polls.size).to eq(10)
+  end
+
+  it "returns a link to the next page of results" do
+    device_author = create :author_with_device
+    20.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json', nil, headers
+
+    expect(response.headers['Link']).to_not be_empty
+    expect(response.headers['Link']).to include("polls")
+    expect(response.headers['Link']).to include("next")
+  end
+
+  it "doesn't return a link to the next page of results when on last page" do
+    device_author = create :author_with_device
+    20.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json?page=2', nil, headers
+
+    polls = parse_json(response.body)
+
+    expect(response.headers['Link']).to be_nil
+    expect(polls.size).to eq(10)
+  end
+
+  it "returns a custom page per size" do
+    device_author = create :author_with_device
+    10.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json?per=3', nil, headers
+
+    polls = parse_json(response.body)
+
+    expect(response.headers['Link']).to be
+    expect(polls.size).to eq(3)
+  end
+
+
+  it "returns no content when requesting a page beyond last page" do
+    device_author = create :author_with_device
+    20.times do
+      create :yes_no_poll_with_uncast_votes, author: device_author
+    end
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(device_author.device_id) }
+    get '/v1/polls.json?page=3', nil, headers
+    expect(response.status).to eq(204)
+  end
+end
