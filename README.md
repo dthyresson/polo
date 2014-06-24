@@ -256,10 +256,14 @@ The link to retreive the next page of data can be found in the response header `
     HTTP/1.1 200 OK
     Content-Type: application/json; charset=utf-8
     Link: /v1/polls?page=4&per=10; rel="next"
+    Status: 200 OK
 
 If you request the last page, the will not be a `Link` header.
 
 If you go beyond the last page, the response will contain a ``204 No Content`` status code.
+
+    HTTP/1.1 204 No Content
+    Status: 204 No Content
 
 Get One of My Polls
 -------------------
