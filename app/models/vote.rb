@@ -65,4 +65,8 @@ class Vote < ActiveRecord::Base
     voter.phone_number
   end
 
+  def formatted_phone_number
+    voter.formatted_phone_number
+  end
+
 end

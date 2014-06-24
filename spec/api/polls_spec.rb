@@ -219,6 +219,27 @@ describe "Poll API POST" do
     expect(parse_json(response.body)['errors']).to include("Need to ask a question or show a photo")
   end
 
+  it "does not create voters with bad phone numbers" do
+    poll_json = File.read(Rails.root.join("spec", "fixtures", "poll_with_some_bad_phone_numbers.json"))
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+    post "/v1/polls/", poll_json, headers
+
+    expect(response).to be_success
+    expect(response.status).to eq(200)
+    expect(response.body).to have_json_path("poll/question")
+    expect(response.body).to have_json_path("poll/choices")
+    expect(response.body).to have_json_path("poll/votes")
+
+    poll = Poll.last
+    expect(poll).to be
+
+    expect(Voter.count).to eq(1)
+    expect(Vote.count).to eq(1)
+    expect(poll.votes.count).to eq(1)
+    expect(Voter.all.map(&:phone_number)).to match_array(["16175551212"])
+  end
+
   xit "cannot create a poll with too large an image" do
     # this fixture may be silly
     # will revist when a final image attachment size is determined
@@ -387,7 +408,6 @@ describe "Poll API pagination" do
     expect(response.headers['Link']).to be
     expect(polls.size).to eq(3)
   end
-
 
   it "returns no content when requesting a page beyond last page" do
     device_author = create :author_with_device

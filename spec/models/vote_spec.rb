@@ -224,3 +224,12 @@ describe Vote, "phone_number" do
     expect(vote.phone_number).to eq(phone_number)
   end
 end
+
+describe Vote, "formatted_phone_number" do
+  it "returns the formatted phone_number of the voter" do
+    phone_number = "14155551212"
+    voter = create :voter, phone_number: phone_number
+    vote = create :vote, voter: voter
+    expect(vote.formatted_phone_number).to eq("+1-415-555-1212")
+  end
+end

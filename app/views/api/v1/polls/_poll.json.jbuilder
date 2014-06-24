@@ -19,8 +19,11 @@ json.poll do
 
   json.notified_voters_count poll.notified_voters_count
   json.notified_phone_numbers poll.notified_phone_numbers
+  json.notified_formatted_phone_numbers poll.notified_formatted_phone_numbers
+
   json.votes_cast_count poll.votes_cast_count
   json.votes_remaining_count poll.votes_remaining_count
+
   json.is_closed poll.over?
 
   if poll.top_choice
@@ -45,6 +48,7 @@ json.poll do
     json.vote do
       json.short_url vote.short_url
       json.voter_phone_number vote.voter_phone_number
+      json.voter_formatted_phone_number vote.formatted_phone_number
       json.choice_title vote.choice.title if vote.cast?
       json.is_cast vote.cast?
       json.is_notified vote.notified?

@@ -87,6 +87,10 @@ class Poll < ActiveRecord::Base
     notified_voters.map(&:phone_number)
   end
 
+  def notified_formatted_phone_numbers
+    notified_voters.map(&:formatted_phone_number)
+  end
+
   def votes_cast_count
     votes.cast_count
   end
@@ -108,9 +112,15 @@ class Poll < ActiveRecord::Base
   def publish_to_voters
     if phone_numbers.present?
       phone_numbers.each do |phone_number|
-        voter = Voter.find_or_create_by({ phone_number: phone_number })
-        vote = Vote.find_or_create_by({ voter: voter, poll: self })
-        PollNotifier.new(self).send_sms(vote)
+        begin
+          if Phony.plausible?(Phony.normalize(phone_number))
+            voter = Voter.find_or_create_by({ phone_number: phone_number })
+            vote = Vote.find_or_create_by({ voter: voter, poll: self })
+            PollNotifier.new(self).send_sms(vote)
+          end
+        rescue Phony::NormalizationError => e
+          # just eat it. eat it. eat it.
+        end
       end
     end
   end

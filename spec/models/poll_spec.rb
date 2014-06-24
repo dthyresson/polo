@@ -374,3 +374,10 @@ describe Poll, "#notified_phone_numbers" do
     expect(poll.notified_phone_numbers).to match_array(["16175550002", "12025550004"])
   end
 end
+
+describe Poll, "#notified_formatted_phone_numbers" do
+  it "returns a formatted list of voter phone_numbers that have been sent notificatons to vote" do
+    poll = create :yes_no_poll_with_some_notified_voters
+    expect(poll.notified_formatted_phone_numbers).to match_array(["+1-617-555-0002", "+1-202-555-0004"])
+  end
+end
