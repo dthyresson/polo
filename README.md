@@ -315,6 +315,7 @@ Question and Photo
           "notified_phone_numbers": [
             "16175550002"
           ],          
+          "notified_formatted_phone_numbers": [],
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
@@ -347,6 +348,7 @@ Question and Photo
               "vote": {
                 "short_url": "YPZeE6",
                 "voter_phone_number": "16175550002",
+                "voter_formatted_phone_number": "+1-617-555-0002",
                 "is_cast": false,
                 "is_notified": true                
               }
@@ -354,6 +356,7 @@ Question and Photo
             {
               "vote": {
                 "voter_phone_number": "12125550003",
+                "voter_formatted_phone_number": "+1-212-555-0003",
                 "short_url": "2PQqPQ",
                 "is_cast": false,
                 "is_notified": false                
@@ -362,6 +365,7 @@ Question and Photo
             {
               "vote": {
                 "voter_phone_number": "16172304800",
+                "voter_formatted_phone_number": "+1-617-230-4800",
                 "short_url": "YEwoED",
                 "is_cast": false,
                 "is_notified": true                
@@ -388,6 +392,7 @@ Question only
           "notified_phone_numbers": [
               "16175550002", "12125550003", "12025550004"
           ],
+          "notified_formatted_phone_numbers": [],
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
@@ -419,6 +424,7 @@ Question only
             {
               "vote": {
                 "voter_phone_number": "16175550002",
+                "voter_formatted_phone_number": "+1-617-555-0002",
                 "short_url": "MEgvV4",
                 "is_cast": false,
                 "is_notified": true
@@ -427,6 +433,7 @@ Question only
             {
               "vote": {
                 "voter_phone_number": "12125550003",
+                "voter_formatted_phone_number": "+1-212-555-0003",
                 "short_url": "eV9LOX",
                 "is_cast": false,
                 "is_notified": true
@@ -435,6 +442,7 @@ Question only
             {
               "vote": {
                 "voter_phone_number": "12025550004",
+                "voter_formatted_phone_number": "+1-202-555-0004",
                 "short_url": "qPvxV6",
                 "is_cast": false,
                 "is_notified": true
@@ -463,6 +471,7 @@ Photo Only
                 "notified_phone_numbers": [
                     "16175550002", "12125550003", "12025550004"
                 ],
+                "notified_formatted_phone_numbers": [],
                 "votes_cast_count": 1,
                 "votes_remaining_count": 2,
                 "is_closed": false,
@@ -494,6 +503,7 @@ Photo Only
                     {
                         "vote": {
                             "voter_phone_number": "12125550003",
+                            "voter_formatted_phone_number": "+1-212-555-0003",
                             "short_url": "2PQqPQ",
                             "is_cast": false,
                             "is_notified": true
@@ -502,6 +512,7 @@ Photo Only
                     {
                         "vote": {
                             "voter_phone_number": "12025550004",
+                            "voter_formatted_phone_number": "+1-202-555-0004",
                             "short_url": "YEwoED",
                             "is_cast": false,
                             "is_notified": true
@@ -510,6 +521,7 @@ Photo Only
                     {
                         "vote": {
                             "voter_phone_number": "16175550002",
+                            "voter_formatted_phone_number": "+1-617-555-0002",
                             "short_url": "YPZeE6",
                             "is_cast": true,
                             "is_notified": true",
@@ -525,57 +537,6 @@ Builder
 -------
 
 See `_poll.json.jbuilder` in `app/views/polls` for the structure.
-
-    json.poll do
-      json.id poll.id
-      json.author do
-        json.name poll.author_name
-      end
-
-      if poll.has_question?
-        json.question poll.question
-      end
-
-      if poll.has_photo?
-        json.photo_url do
-          json.original poll.photo_url(:original)
-          json.medium poll.photo_url(:medium)
-          json.thumb poll.photo_url(:thumb)
-        end
-      end
-
-      json.votes_cast_count poll.votes_cast_count
-      json.votes_remaining_count poll.votes_remaining_count
-      json.is_closed poll.over?
-
-      if poll.top_choice
-        json.top_choice do
-          json.title poll.top_choice.title
-          json.votes_count poll.top_choice.votes.count
-          json.popularity poll.top_choice.popularity
-          json.popularity_percentage poll.top_choice.decorate.to_percentage
-        end
-      end
-
-      json.choices ChoiceDecorator.decorate_collection(poll.choices) do |choice|
-        json.choice do
-          json.title choice.title
-          json.votes_count choice.votes.count
-          json.popularity choice.popularity
-          json.popularity_percentage choice.to_percentage
-        end
-      end
-
-      json.votes poll.votes do |vote|
-        json.vote do
-          json.voter_phone_number vote.voter_phone_number
-          json.is_notified vote.notified?
-          json.short_url vote.short_url
-          json.is_cast vote.cast?
-          json.choice_title vote.choice.title if vote.cast?
-        end
-      end
-    end
 
 For API Requests
 ================
