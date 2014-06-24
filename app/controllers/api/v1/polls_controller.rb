@@ -27,8 +27,10 @@ class Api::V1::PollsController < ApiController
     @polls = Poll.for_author(current_user).recent.ordered.page(page).per(per)
 
     if @polls.next_page
-      headers['Link'] = "#{v1_polls_path}?page=#{@polls.next_page}; rel=\"next\""
-    else
+      headers['Link'] = "#{v1_polls_path}?page=#{@polls.next_page}&per=#{per}; rel=\"next\""
+    end
+
+    if @polls.empty?
       render status: :no_content
     end
   end

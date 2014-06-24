@@ -239,6 +239,28 @@ Get My Polls
 
     get '/v1/polls.json', nil, headers
 
+This returns ``recent polls`` for the authorized user as paginated results ``ordered`` with most recently updated polls first.
+
+**Pagination**
+
+By default, there are 10 polls returned per page.
+
+You can request a page of polls via the ``page`` parameter, such as
+
+    get '/v1/polls.json?page=3', nil, headers
+
+Alternatively, you can override the `per` parameter.
+
+The link to retreive the next page of data can be found in the response header ``Link`` 
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset=utf-8
+    Link: /v1/polls?page=4&per=10; rel="next"
+
+If you request the last page, the will not be a `Link` header.
+
+If you go beyond the last page, the response will contain a ``204 No Content`` status code.
+
 Get One of My Polls
 -------------------
 
