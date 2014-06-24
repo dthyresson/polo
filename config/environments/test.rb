@@ -41,3 +41,5 @@ Rails.application.configure do
 
   Paperclip::Attachment.default_options[:path] = "#{Rails.root}/spec/test_files/:class/:id_partition/:style.:extension"
 end
+
+Rails.application.routes.default_url_options[:host] = 'www.example.com'

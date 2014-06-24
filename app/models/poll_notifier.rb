@@ -14,11 +14,12 @@ class PollNotifier < Object
     return unless vote.present?
     phone_number = vote.phone_number
     return unless phone_number.present?
+
     begin
       TWILIO.account.messages.create(
         from: TWILIO_PHONE_NUMBER,
         to: phone_number,
-        body: "#{author_name} wants to know, \"#{question}\nVote now! #{root_url(vote.short_url)}\""
+        body: "#{author_name} wants to know, \"#{question}\nVote now! #{root_url}#{vote.short_url}\""
       )
       puts "SMS sent to #{phone_number}"
       vote.notify!
@@ -28,6 +29,7 @@ class PollNotifier < Object
       puts e.message
     rescue => e
       # just eat it. eat it. eat it.
+      puts e.message
       puts "uh oh. failed to send SMS to #{phone_number}"
     end
   end
