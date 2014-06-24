@@ -14,7 +14,10 @@ if Rails.env.development?
       create :yes_no_poll_with_photo_and_uncast_votes, question: "Play Marco Polo?", phone_numbers: dev_phone_numbers
       create :yes_no_poll_with_photo_and_uncast_votes, question: nil, phone_numbers: dev_phone_numbers
 
-      create_list(:yes_no_poll_with_uncast_votes, 50)
+      device_author = create :author_with_device
+      50.times do
+        create :yes_no_poll_with_uncast_votes, author: device_author
+      end
     end
   end
 end
