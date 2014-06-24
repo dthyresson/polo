@@ -24,7 +24,8 @@ describe "Poll API GET" do
     get '/v1/polls.json', nil, headers
 
     expect(response).to be_success
-    expect(response.body).to eq("[]")
+    expect(response.body).to eq("")
+    expect(response.status).to eq(204)
   end
 
   it "gets a list of my polls" do
