@@ -5,7 +5,7 @@ FactoryGirl.define do
     author
     question "Should I travel through Asia?"
     photo nil
-    phone_numbers ["16175551212", "12125551212", "12025551212"]
+    phone_numbers ["617-555-1212", "2125551212", "(202) 555-1212"]
     closed_at nil
 
     factory :closed_poll do
@@ -26,7 +26,7 @@ FactoryGirl.define do
       end
 
       factory :yes_no_poll_with_phone_numbers do
-        phone_numbers ["16175551212", "12125551212", "12025551212"]
+        phone_numbers ["617-555-1212", "2125551212", "(202) 555-1212"]
       end
 
       factory :yes_no_poll_with_photo do

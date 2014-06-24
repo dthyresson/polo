@@ -2,18 +2,18 @@
 
 FactoryGirl.define do
   factory :voter do
-    phone_number "16175550001"
+    phone_number "617-555-0001"
 
     factory :boston_voter do
-      phone_number "16175550002"
+      phone_number "1 (617) 555-0002"
     end
 
     factory :nyc_voter do
-      phone_number "12125550003"
+      phone_number "2125550003"
     end
 
     factory :dc_voter do
-      phone_number "12025550004"
+      phone_number "202 555-0004"
     end
   end
 end

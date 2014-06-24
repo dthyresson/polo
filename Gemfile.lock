@@ -134,6 +134,9 @@ GEM
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
     jwt (1.0.0)
+    kaminari (0.16.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     kgio (2.9.2)
     launchy (2.4.2)
       addressable (~> 2.3)
@@ -314,6 +317,7 @@ DEPENDENCIES
   jbuilder (~> 2.1.1)
   jquery-rails
   json_spec (~> 1.1.2)
+  kaminari
   launchy
   neat (~> 1.5.1)
   newrelic_rpm (>= 3.7.3)

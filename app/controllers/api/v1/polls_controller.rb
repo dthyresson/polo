@@ -25,6 +25,7 @@ class Api::V1::PollsController < ApiController
 
   def index
     @polls = Poll.for_author(current_user)
+    # .page(page)
   end
 
   def show
@@ -36,6 +37,10 @@ class Api::V1::PollsController < ApiController
   end
 
   private
+
+  def page
+    params[:page] || 1
+  end
 
   def device
     device_id = params[:poll][:author_device_id]
