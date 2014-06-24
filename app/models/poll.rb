@@ -19,6 +19,8 @@ class Poll < ActiveRecord::Base
   accepts_nested_attributes_for :author
   accepts_nested_attributes_for :choices
 
+  before_save :normalize_phone_numbers!
+
   def photo_url(style)
     if photo.file?
       photo.url(style)
@@ -75,6 +77,10 @@ class Poll < ActiveRecord::Base
     question.present?
   end
 
+  def has_phone_numbers?
+    phone_numbers.present?
+  end
+
   def notified_voters
     votes.includes(:voter).notified.map(&:voter)
   end
@@ -113,13 +119,9 @@ class Poll < ActiveRecord::Base
     if phone_numbers.present?
       phone_numbers.each do |phone_number|
         begin
-          if Phony.plausible?(Phony.normalize(phone_number))
-            voter = Voter.find_or_create_by({ phone_number: phone_number })
-            vote = Vote.find_or_create_by({ voter: voter, poll: self })
-            PollNotifier.new(self).send_sms(vote)
-          end
-        rescue Phony::NormalizationError => e
-          # just eat it. eat it. eat it.
+          voter = Voter.find_or_create_by({ phone_number: phone_number })
+          vote = Vote.find_or_create_by({ voter: voter, poll: self })
+          PollNotifier.new(self).send_sms(vote)
         end
       end
     end
@@ -151,5 +153,18 @@ class Poll < ActiveRecord::Base
     unless has_question? || has_photo?
       errors.add(:base, "Need to ask a question or show a photo")
     end
+  end
+
+  def normalize_phone_numbers!
+    tel = []
+    if self.has_phone_numbers?
+      self.phone_numbers.each do |phone_number|
+        normalized_phone_number = PhonyRails.normalize_number(phone_number, :country_code => 'US')
+        if Phony.plausible?(normalized_phone_number)
+          tel << normalized_phone_number
+        end
+      end
+    end
+    self.phone_numbers = tel
   end
 end

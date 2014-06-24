@@ -40,7 +40,7 @@ class Vote < ActiveRecord::Base
   end
 
   def voter_phone_number
-    voter.phone_number
+    voter.phone_number if voter.present?
   end
 
   def votable?
@@ -62,11 +62,11 @@ class Vote < ActiveRecord::Base
   end
 
   def phone_number
-    voter.phone_number
+    voter.phone_number if voter.present?
   end
 
   def formatted_phone_number
-    voter.formatted_phone_number
+    voter.formatted_phone_number if voter.present?
   end
 
 end

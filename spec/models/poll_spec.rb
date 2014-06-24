@@ -381,3 +381,23 @@ describe Poll, "#notified_formatted_phone_numbers" do
     expect(poll.notified_formatted_phone_numbers).to match_array(["+1-617-555-0002", "+1-202-555-0004"])
   end
 end
+
+describe Poll, "#has_phone_numbers?" do
+  it "determines that phone numbers are set to notify as voters" do
+    poll = create :poll, phone_numbers: ["16175551212", "12125551212"]
+    expect(poll).to have_phone_numbers
+  end
+end
+
+describe Poll, "save callback to normalize phone numbers" do
+  it "makes the phone numbers nice when saving the poll" do
+    poll = create :poll, phone_numbers: ["6175551212", "2125551212", "+1-415-555-1212", "(415) 555-5555", "(202)5559999"]
+    expect(poll.reload.phone_numbers).to eq(["16175551212", "12125551212", "14155551212", "14155555555", "12025559999"])
+  end
+
+  it "removes bad phone numbers saving the poll" do
+    poll = create :poll, phone_numbers: ["junk", "2125551212", "+1-415-555-1212", "(415) 555-5555", "00000"]
+    expect(poll.reload.phone_numbers).to eq(["12125551212", "14155551212", "14155555555"])
+  end
+
+end
