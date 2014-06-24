@@ -690,6 +690,8 @@ When deploying to Heroku, will need to setup the necessary environment values as
     ASSETS_VERSION:               1.0
     DATABASE_URL:                 postgres://something
     EMAIL_RECIPIENTS:             someone@intrepid.io
+    HASHID_MINIMUM_LENGTH=6
+    HASHID_SALT="MARCO POLO, the subject of this memoir, was born at Venice in the year 1 254."
     HEROKU_POSTGRESQL_SILVER_URL: postgres://something
     RACK_ENV:                     staging
     RAILS_ENV:                    staging
@@ -700,6 +702,9 @@ When deploying to Heroku, will need to setup the necessary environment values as
     SMTP_DOMAIN:                  polo-staging.herokuapp.com
     SMTP_PASSWORD:                xxxxx
     SMTP_USERNAME:                appxxxxxxx@heroku.com
+    TWILIO_ACCOUNT_SID:           AC2xxxxxxxxx
+    TWILIO_AUTH_TOKEN:            xxxxxxxxxxxx
+    TWILIO_PHONE_NUMBER:          +14155551212
 
 Procfile
 --------
