@@ -681,6 +681,26 @@ Heroku
 
 When deploying to Heroku, will need to setup the necessary environment values as Heroku config settings.
 
+*Add Ons*
+* heroku addons:add heroku-postgresql
+* heroku addons:add sendgrid
+
+*Configs*
+
+    ASSETS_VERSION:               1.0
+    DATABASE_URL:                 postgres://something
+    EMAIL_RECIPIENTS:             someone@intrepid.io
+    HEROKU_POSTGRESQL_SILVER_URL: postgres://something
+    RACK_ENV:                     staging
+    RAILS_ENV:                    staging
+    SECRET_KEY_BASE:              xxxxxxxxxxxxxxxx
+    SENDGRID_PASSWORD:            xxxxx
+    SENDGRID_USERNAME:            appxxxxxxx@heroku.com
+    SMTP_ADDRESS:                 smtp.sendgrid.net
+    SMTP_DOMAIN:                  polo-staging.herokuapp.com
+    SMTP_PASSWORD:                xxxxx
+    SMTP_USERNAME:                appxxxxxxx@heroku.com
+
 Procfile
 --------
 
