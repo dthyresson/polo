@@ -8,7 +8,7 @@ class Api::V1::PollsController < ApiController
       @poll.end!
       render :show
     else
-      render :json => { :errors => "Forbidden"}, status: 403
+      render :json => { :errors => "Forbidden"}, status: :forbidden
     end
   end
 
@@ -19,20 +19,25 @@ class Api::V1::PollsController < ApiController
       @poll.delay.publish_to_voters
       render :create
     else
-      render :json => { :errors => @poll.errors.full_messages }, status: 422
+      render :json => { :errors => @poll.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def index
-    @polls = Poll.for_author(current_user)
-    # .page(page)
+    @polls = Poll.for_author(current_user).recent.ordered.page(page).per(per)
+
+    if @polls.next_page
+      headers['Link'] = "#{v1_polls_path}?page=#{@polls.next_page}; rel=\"next\""
+    else
+      render status: :no_content
+    end
   end
 
   def show
     @poll = Poll.find(params[:id])
 
     unless @poll.author == current_user
-      render :json => { :errors => "Forbidden"}, status: 403
+      render :json => { :errors => "Forbidden"}, status: :forbidden
     end
   end
 
@@ -40,6 +45,10 @@ class Api::V1::PollsController < ApiController
 
   def page
     params[:page] || 1
+  end
+
+  def per
+    params[:per] || 10
   end
 
   def device
