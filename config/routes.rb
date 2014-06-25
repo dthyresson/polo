@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :polls, only: [:index, :show, :create] do
         put 'close', on: :member
+        put 'open', on: :member
       end
 
       resources :votes, only: [:show, :update]

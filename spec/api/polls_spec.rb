@@ -144,8 +144,6 @@ describe "Poll API GET" do
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
     get "/v1/polls/#{poll.id}.json", nil, headers
 
-    puts parse_json(response.body)
-
     expect(response).to be_success
     expect(response.status).to eq(200)
     expect(response.body).to have_json_path("poll/question")
@@ -346,6 +344,62 @@ describe "Poll API PUT to close" do
     expect(response.status).to eq(401)
     poll = Poll.last
     expect(poll).to be_in_progress
+  end
+end
+
+describe "Poll API PUT to open" do
+  it 'opens a closed poll' do
+    author = create :author_with_device
+    poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to be_over
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
+    put "/v1/polls/#{poll.id}/open.json", nil, headers
+
+    expect(response.status).to eq(200)
+    poll = Poll.last
+    expect(poll).to be_in_progress
+  end
+
+  it "will not open someone else's poll" do
+    someone_else = create :author_with_device
+
+    author = create :author_with_device
+    poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to be_over
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(someone_else.device_id) }
+
+    put "/v1/polls/#{poll.id}/open.json", nil, headers
+
+    expect(response.status).to eq(403)
+    poll = Poll.last
+    expect(poll).to be_over
+  end
+
+  it "is unauthorized if try to open with a bad device id" do
+    bad_device_id = SecureRandom.hex(20)
+
+    author = create :author_with_device
+    poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to be_over
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(bad_device_id) }
+
+    put "/v1/polls/#{poll.id}/open.json", nil, headers
+
+    expect(response.status).to eq(401)
+    poll = Poll.last
+    expect(poll).to be_over
   end
 end
 

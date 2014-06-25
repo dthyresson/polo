@@ -141,12 +141,25 @@ end
 describe Poll, "#end!" do
   it "should close the poll" do
     open_poll = create(:open_poll)
-    expect(open_poll.in_progress?).to be_true
-    expect(open_poll.over?).to be_false
+    expect(open_poll).to be_in_progress
+    expect(open_poll).to_not be_over
 
     open_poll.end!
 
-    expect(open_poll.over?).to be_true
+    expect(open_poll).to be_over
+  end
+end
+
+describe Poll, "#open!" do
+  it "should open a closed poll" do
+    closed_poll = create(:closed_poll)
+    expect(closed_poll).to be_over
+    expect(closed_poll).to be_over
+    expect(closed_poll).to_not be_in_progress
+
+    closed_poll.open!
+
+    expect(closed_poll).to be_in_progress
   end
 end
 

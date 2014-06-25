@@ -147,6 +147,8 @@ Polls are open until closed by the author or all votes have been cast.
 
 When a poll is closed, it can no longer be voted on.
 
+An author an reopen a poll at will (such as if they closed it by mistake).
+
 Photos
 ------
 
@@ -281,6 +283,11 @@ Close One of My Polls
 ---------------------
 
     put "/v1/polls/#{poll.id}/close.json", nil, headers
+
+Open One of My Polls
+---------------------
+
+    put "/v1/polls/#{poll.id}/open.json", nil, headers
 
 Votes
 -----

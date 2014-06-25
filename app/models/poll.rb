@@ -41,6 +41,10 @@ class Poll < ActiveRecord::Base
     update_attributes({ closed_at: Time.zone.now })
   end
 
+  def open!
+    update_attributes({ closed_at: nil })
+  end
+
   def over?
     not in_progress?
   end

@@ -1,17 +1,6 @@
 class Api::V1::PollsController < ApiController
   before_action :authenticate, except: [ :create ]
 
-  def close
-    @poll = Poll.find(params[:id])
-
-    if @poll.author == current_user
-      @poll.end!
-      render :show
-    else
-      render :json => { :errors => "Forbidden"}, status: :forbidden
-    end
-  end
-
   def create
     @poll = Poll.new(poll_params_with_author_info)
 
@@ -37,6 +26,29 @@ class Api::V1::PollsController < ApiController
     @poll = Poll.find(params[:id])
 
     unless @poll.author == current_user
+      render :json => { :errors => "Forbidden"}, status: :forbidden
+    end
+  end
+
+  def open
+    @poll = Poll.find(params[:id])
+
+    if @poll.author == current_user
+      @poll.open!
+      render :show
+    else
+      render :json => { :errors => "Forbidden"}, status: :forbidden
+    end
+  end
+
+
+  def close
+    @poll = Poll.find(params[:id])
+
+    if @poll.author == current_user
+      @poll.end!
+      render :show
+    else
       render :json => { :errors => "Forbidden"}, status: :forbidden
     end
   end

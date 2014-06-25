@@ -9,7 +9,7 @@ FactoryGirl.define do
     closed_at nil
 
     factory :closed_poll do
-      closed_at { Time.zone.now }
+      closed_at { 1.hour.ago }
     end
 
     factory :poll_from_last_year do
