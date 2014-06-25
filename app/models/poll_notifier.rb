@@ -9,17 +9,26 @@ class PollNotifier < Object
     @question = @poll.question
   end
 
-  def ok_to_sms?(vote)
+  def ok_to_message?(vote)
     return false unless @poll
     return false unless vote
     return false unless vote.has_phone_number?
     true
   end
 
-  def send_sms(vote)
-    return false unless ok_to_sms?(vote)
+  def notify(vote)
+    return false unless ok_to_message?(vote)
+    sms(vote.phone_number, notify_message_text(vote))
+  end
+
+  def remind(vote)
+    return false unless ok_to_message?(vote)
+    sms(vote.phone_number, reminder_message_text(vote))
+  end
+
+  def sms(phone_number, message_body)
     begin
-      TWILIO.account.messages.create(from: TWILIO_PHONE_NUMBER, to: vote.phone_number, body: sms_body(vote))
+      TWILIO.account.messages.create(from: TWILIO_PHONE_NUMBER, to: vote.phone_number, body: message_body)
     rescue Twilio::REST::RequestError => e
       Raven.capture_exception(e)
     rescue => e
@@ -28,7 +37,11 @@ class PollNotifier < Object
     true
   end
 
-  def sms_body(vote)
+  def notify_message_text(vote)
     "#{author_name} wants to know, \"#{question}\nVote now! #{root_url}#{vote.short_url}\""
+  end
+
+  def reminder_message_text(vote)
+    "#{author_name} wants to remind you, \"#{question}\nVote now! #{root_url}#{vote.short_url}\""
   end
 end

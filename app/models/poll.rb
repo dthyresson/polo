@@ -126,7 +126,7 @@ class Poll < ActiveRecord::Base
         begin
           voter = Voter.find_or_create_by({ phone_number: phone_number })
           vote = Vote.find_or_create_by({ voter: voter, poll: self })
-          if PollNotifier.new(self).send_sms(vote)
+          if PollNotifier.new(self).notify(vote)
             vote.notify!
           end
         end
@@ -137,7 +137,7 @@ class Poll < ActiveRecord::Base
   def remind_uncast_voters!
     return if reminded?
     votes.uncast.each do |vote|
-      if PollNotifier.new(self).send_sms(vote)
+      if PollNotifier.new(self).remind(vote)
         vote.notify!
       end
     end
