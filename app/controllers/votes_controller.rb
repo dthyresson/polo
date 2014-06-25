@@ -1,5 +1,4 @@
 class VotesController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def show
     @vote = Vote.find_by_short_url(params[:short_url])

@@ -5,7 +5,7 @@ class Vote < ActiveRecord::Base
 
   def self.find_by_short_url(hashid)
     id = HASHIDS.decrypt(hashid)
-    Vote.find(id).first
+    Vote.find(id).first || NullVote.new
   end
 
   def short_url

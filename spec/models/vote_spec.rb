@@ -118,6 +118,10 @@ describe Vote, "#find_by_short_url" do
     expect(found_vote).to be
     expect(found_vote.id).to eq(found_vote.id)
   end
+
+  it "should return a dummy vote on a bad short url" do
+    expect(Vote.find_by_short_url("garbage")).to be_a(NullVote)
+  end
 end
 
 describe Vote, "#question" do
