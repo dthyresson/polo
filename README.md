@@ -149,6 +149,8 @@ When a poll is closed, it can no longer be voted on.
 
 An author an reopen a poll at will (such as if they closed it by mistake).
 
+An author has the option to remind all voters who have not yet cast a vote once. They canot remind voters more than once.
+
 Photos
 ------
 
@@ -289,6 +291,13 @@ Open One of My Polls
 
     put "/v1/polls/#{poll.id}/open.json", nil, headers
 
+Remind Voters of One of My Polls Who Have Not Cast Votes
+--------------------------------------------------
+
+    put "/v1/polls/#{poll.id}/remind.json", nil, headers
+
+**Note** You can only remind voters once.
+
 Votes
 -----
 
@@ -326,6 +335,7 @@ Question and Photo
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
+          "is_reminded": false,
           "top_choice": {
             "title": "Tied",
             "votes_count": 0,
@@ -393,6 +403,7 @@ Question only
           "votes_cast_count": 0,
           "votes_remaining_count": 3,
           "is_closed": false,
+          "is_reminded": false,
           "top_choice": {
             "title": "Tied",
             "votes_count": 0,
@@ -462,6 +473,7 @@ Photo Only
                 "votes_cast_count": 1,
                 "votes_remaining_count": 2,
                 "is_closed": false,
+                "is_reminded": false,
                 "top_choice": {
                     "title": "Yes",
                     "votes_count": 1,
