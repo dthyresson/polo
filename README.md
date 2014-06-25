@@ -684,6 +684,11 @@ When deploying to Heroku, will need to setup the necessary environment values as
 *Add Ons*
 * heroku addons:add heroku-postgresql
 * heroku addons:add sendgrid
+* heroku addons:add sentry
+
+**Exceptions**
+
+Exception reporting is handled by [Sentry](https://getsentry.com/welcome/).
 
 *Configs*
 
@@ -698,6 +703,7 @@ When deploying to Heroku, will need to setup the necessary environment values as
     SECRET_KEY_BASE:              xxxxxxxxxxxxxxxx
     SENDGRID_PASSWORD:            xxxxx
     SENDGRID_USERNAME:            appxxxxxxx@heroku.com
+    SENTRY_DSN:                   https://xxxxxx@app.getsentry.com/xxxxxxx
     SMTP_ADDRESS:                 smtp.sendgrid.net
     SMTP_DOMAIN:                  polo-staging.herokuapp.com
     SMTP_PASSWORD:                xxxxx

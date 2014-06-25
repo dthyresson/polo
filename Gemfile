@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.1.2'
 
-gem 'airbrake'
+# gem 'airbrake' in favor of sentry since it is free for now?
 gem 'bourbon', '~> 3.2.1'
 gem 'coffee-rails'
 gem 'delayed_job_active_record'
@@ -26,6 +26,7 @@ gem 'rack-timeout'
 gem 'rails', '4.1.1'
 gem 'recipient_interceptor'
 gem 'sass-rails', '~> 4.0.3'
+gem "sentry-raven"
 gem 'simple_form'
 gem 'title'
 gem 'twilio-ruby'

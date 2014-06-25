@@ -23,9 +23,9 @@ class PollNotifier < Object
       TWILIO.account.messages.create(from: TWILIO_PHONE_NUMBER, to: vote.phone_number, body: sms_body(vote))
       vote.notify!
     rescue Twilio::REST::RequestError => e
-      puts e.message
+      Raven.capture_exception(e)
     rescue => e
-      puts e.message
+      Raven.capture_exception(e)
     end
   end
 
