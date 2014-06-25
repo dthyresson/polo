@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623183621) do
+ActiveRecord::Schema.define(version: 20140625204143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20140623183621) do
     t.integer  "choices_count",      default: 0
     t.integer  "votes_count",        default: 0
     t.string   "phone_numbers",      default: [], array: true
+    t.datetime "reminded_at"
   end
 
   add_index "polls", ["author_id"], name: "index_polls_on_author_id", using: :btree

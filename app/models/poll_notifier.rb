@@ -17,16 +17,15 @@ class PollNotifier < Object
   end
 
   def send_sms(vote)
-    return unless ok_to_sms?(vote)
-
+    return false unless ok_to_sms?(vote)
     begin
       TWILIO.account.messages.create(from: TWILIO_PHONE_NUMBER, to: vote.phone_number, body: sms_body(vote))
-      vote.notify!
     rescue Twilio::REST::RequestError => e
       Raven.capture_exception(e)
     rescue => e
       Raven.capture_exception(e)
     end
+    true
   end
 
   def sms_body(vote)

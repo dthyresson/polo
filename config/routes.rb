@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :polls, only: [:index, :show, :create] do
         put 'close', on: :member
         put 'open', on: :member
+        put 'remind', on: :member
       end
 
       resources :votes, only: [:show, :update]

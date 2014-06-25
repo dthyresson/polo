@@ -78,17 +78,6 @@ describe Vote, "#cast!" do
 
 end
 
-describe Vote, "#cast?" do
-  it "checks is a vote has been for a choice" do
-    poll = create :yes_no_poll_with_uncast_votes
-    vote = poll.votes.first
-    vote.cast!(poll.choices.first)
-
-    expect(vote.cast_at).to be_present
-    expect(vote).to be_cast
-  end
-end
-
 describe Vote, "#voter_phone_number" do
   it "reveals the voter's phone number" do
     poll = create :yes_no_poll_with_uncast_votes
@@ -167,6 +156,17 @@ describe Vote, "#votable?" do
   end
 end
 
+describe Vote, "#cast?" do
+  it "checks is a vote has been for a choice" do
+    poll = create :yes_no_poll_with_uncast_votes
+    vote = poll.votes.first
+    vote.cast!(poll.choices.first)
+
+    expect(vote.cast_at).to be_present
+    expect(vote).to be_cast
+  end
+end
+
 describe Vote, ".cast" do
   it "returns only cast votes" do
     poll = create :yes_no_poll_with_uncast_votes
@@ -188,6 +188,28 @@ describe Vote, ".cast_count" do
     another_poll.votes.last.cast!(poll.choices.last)
 
     expect(Vote.cast_count).to eq(2)
+  end
+end
+
+describe Vote, "#uncast?" do
+  it "checks is a vote has been for a choice" do
+    poll = create :yes_no_poll_with_uncast_votes
+    vote = poll.votes.first
+
+    expect(vote.cast_at).to_not be
+    expect(vote).to be_uncast
+    expect(vote).to_not be_cast
+  end
+end
+
+describe Vote, ".uncast" do
+  it "returns only uncast votes" do
+    poll = create :yes_no_poll_with_uncast_votes
+    another_poll = create :yes_no_poll_with_uncast_votes
+
+    poll.votes.first.cast!(poll.choices.first)
+
+    expect(Vote.uncast).to_not include(poll.choices.first)
   end
 end
 

@@ -382,6 +382,47 @@ describe "Poll API PUT to open" do
     poll = Poll.last
     expect(poll).to be_over
   end
+end
+
+describe "Poll API PUT to remind" do
+  it 'reminds an unreminded poll' do
+    author = create :author_with_device
+    poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to_not be_reminded
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
+    put "/v1/polls/#{poll.id}/remind.json", nil, headers
+
+    expect(response.status).to eq(200)
+    expect(response.body).to have_json_path("poll/is_reminded")
+    expect(parse_json(response.body)['poll']['is_reminded']).to be_true
+
+    poll = Poll.last
+    expect(poll).to be_reminded
+  end
+
+  it "will not remind someone else's poll" do
+    someone_else = create :author_with_device
+
+    author = create :author_with_device
+    poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
+    choices = create_list(:choice, 2, poll: poll)
+
+    expect(poll).to_not be_reminded
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(someone_else.device_id) }
+
+    put "/v1/polls/#{poll.id}/remind.json", nil, headers
+
+    expect(response.status).to eq(403)
+    poll = Poll.last
+    expect(poll).to_not be_reminded
+  end
+
 
   it "is unauthorized if try to open with a bad device id" do
     bad_device_id = SecureRandom.hex(20)
@@ -390,16 +431,16 @@ describe "Poll API PUT to open" do
     poll = create(:yes_no_poll, author: author, closed_at: 2.days.ago)
     choices = create_list(:choice, 2, poll: poll)
 
-    expect(poll).to be_over
+    expect(poll).to_not be_reminded
 
     headers = { "CONTENT_TYPE" => "application/json",
                 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(bad_device_id) }
 
-    put "/v1/polls/#{poll.id}/open.json", nil, headers
+    put "/v1/polls/#{poll.id}/remind.json", nil, headers
 
     expect(response.status).to eq(401)
     poll = Poll.last
-    expect(poll).to be_over
+    expect(poll).to_not be_reminded
   end
 end
 

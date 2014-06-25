@@ -25,6 +25,7 @@ json.poll do
   json.votes_remaining_count poll.votes_remaining_count
 
   json.is_closed poll.over?
+  json.is_reminded poll.reminded?
 
   if poll.top_choice
     json.top_choice do

@@ -53,6 +53,17 @@ class Api::V1::PollsController < ApiController
     end
   end
 
+  def remind
+    @poll = Poll.find(params[:id])
+
+    if @poll.author == current_user
+      @poll.remind_uncast_voters!
+      render :show
+    else
+      render :json => { :errors => "Forbidden"}, status: :forbidden
+    end
+  end
+
   private
 
   def polls_for_current_user

@@ -177,6 +177,83 @@ describe Poll, "#publish_to_voters" do
   end
 end
 
+describe Poll, "#remind_uncast_voters!" do
+  it "should remind voters who have not yet cast a vote" do
+    phone_numbers = ["16175551212", "12125551212"]
+    poll = create(:yes_no_poll_with_phone_numbers, phone_numbers: phone_numbers)
+    poll.publish_to_voters
+
+    cast_vote = poll.votes.first
+    cast_vote.cast!(poll.choices.first)
+
+    uncast_vote = poll.votes.last
+
+    poll.votes.cast.each do |vote|
+      vote.update_attribute(:notified_at, 5.days.ago)
+    end
+
+    expect(cast_vote.reload.notified_at.to_date).to eq(5.days.ago.to_date)
+
+    poll.votes.uncast.each do |vote|
+      vote.update_attribute(:notified_at, 10.days.ago)
+    end
+
+    expect(uncast_vote.reload.notified_at.to_date).to eq(10.days.ago.to_date)
+
+    poll.remind_uncast_voters!
+
+    expect(uncast_vote.reload.notified_at.to_date).to eq(Date.today)
+    expect(poll).to be_reminded
+  end
+
+  it "should remind voters who have not yet cast a vote -- just once and cannot do it again" do
+    phone_numbers = ["16175551212", "12125551212"]
+    poll = create(:yes_no_poll_with_phone_numbers, phone_numbers: phone_numbers)
+    poll.publish_to_voters
+
+    cast_vote = poll.votes.first
+    cast_vote.cast!(poll.choices.first)
+
+    uncast_vote = poll.votes.last
+
+    poll.votes.cast.each do |vote|
+      vote.update_attribute(:notified_at, 5.days.ago)
+    end
+
+    expect(cast_vote.reload.notified_at.to_date).to eq(5.days.ago.to_date)
+
+    poll.votes.uncast.each do |vote|
+      vote.update_attribute(:notified_at, 10.days.ago)
+    end
+
+    expect(uncast_vote.reload.notified_at.to_date).to eq(10.days.ago.to_date)
+
+    poll.remind!
+
+    poll.remind_uncast_voters!
+
+    expect(uncast_vote.reload.notified_at.to_date).to_not eq(Date.today)
+  end
+end
+
+describe Poll, "#remind!" do
+  it "marks that the poll voters who have not cast a vote yet have already been rengaged once" do
+    poll = create :yes_no_poll_with_uncast_votes
+    expect(poll).to_not be_reminded
+    poll.remind!
+    expect(poll).to be_reminded
+  end
+end
+
+describe Poll, "#notified_again?" do
+  it "marks that the poll voters who have not cast a vote yet have already been rengaged once" do
+    poll = create :yes_no_poll_with_uncast_votes
+    expect(poll).to_not be_reminded
+    poll.remind!
+    expect(poll).to be_reminded
+  end
+end
+
 describe Poll, "#author_name" do
   it "provides the name of the poll author" do
     author_name = "Bob"

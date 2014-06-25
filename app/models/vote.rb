@@ -30,6 +30,14 @@ class Vote < ActiveRecord::Base
     choice.present?
   end
 
+  def self.uncast
+    where("choice_id is null")
+  end
+
+  def uncast?
+    not cast?
+  end
+
   def choice_title
     choice && choice.title
   end
