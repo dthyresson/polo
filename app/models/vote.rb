@@ -23,8 +23,7 @@ class Vote < ActiveRecord::Base
   def cast!(choice)
     return if poll.over?
     update_attributes({ choice: choice, cast_at: Time.zone.now })
-    poll.calculate_popularity!
-    poll.end! if poll.ok_to_auto_close?
+    poll.vote_cast!
   end
 
   def cast?
@@ -32,7 +31,7 @@ class Vote < ActiveRecord::Base
   end
 
   def choice_title
-    choice.title if choice.present?
+    choice && choice.title
   end
 
   def question
@@ -40,7 +39,7 @@ class Vote < ActiveRecord::Base
   end
 
   def voter_phone_number
-    voter.phone_number if voter.present?
+    voter && voter.phone_number
   end
 
   def votable?

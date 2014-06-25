@@ -12,7 +12,7 @@ FactoryGirl.define do
       closed_at { Time.zone.now }
     end
 
-    factory :poll_from_yast_year do
+    factory :poll_from_last_year do
       after(:create) do |poll, evaluator|
         poll.update_attribute(:created_at, 1.year.ago)
       end
@@ -84,6 +84,19 @@ FactoryGirl.define do
 
           dc_voter = create :dc_voter
           create(:vote, poll: poll, voter: dc_voter, choice: nil)
+        end
+      end
+
+      factory :yes_no_poll_with_cast_votes do
+        after(:create) do |poll, evaluator|
+          boston_voter = create :boston_voter
+          create(:vote, poll: poll, voter: boston_voter, choice: poll.choices.first)
+
+          nyc_voter = create :nyc_voter
+          create(:vote, poll: poll, voter: nyc_voter, choice: poll.choices.first)
+
+          dc_voter = create :dc_voter
+          create(:vote, poll: poll, voter: dc_voter, choice: poll.choices.first)
         end
       end
     end

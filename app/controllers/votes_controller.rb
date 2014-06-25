@@ -11,7 +11,7 @@ class VotesController < ApplicationController
   def update
     @vote = Vote.find(params[:id])
     choice = Choice.find(params[:choice_id])
-    @vote.cast!(choice) if choice
+    choice && @vote.cast!(choice)
     redirect_to vote_short_url_path(@vote.short_url)
   end
 end

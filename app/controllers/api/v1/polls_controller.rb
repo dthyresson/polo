@@ -24,13 +24,11 @@ class Api::V1::PollsController < ApiController
   end
 
   def index
-    @polls = Poll.for_author(current_user).recent.ordered.page(page).per(per)
-
-    if @polls.next_page
+    if polls_for_current_user.next_page
       headers['Link'] = "#{v1_polls_path}?page=#{@polls.next_page}&per=#{per}; rel=\"next\""
     end
 
-    if @polls.empty?
+    if polls_for_current_user.empty?
       render status: :no_content
     end
   end
@@ -44,6 +42,10 @@ class Api::V1::PollsController < ApiController
   end
 
   private
+
+  def polls_for_current_user
+    @polls ||= Poll.for_author(current_user).recent.ordered.page(page).per(per)
+  end
 
   def page
     params[:page] || 1

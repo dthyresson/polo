@@ -111,7 +111,7 @@ end
 describe Poll, ".recent" do
   it "should return recently created polls" do
     polls = create_list(:poll, 2)
-    older_polls = create_list(:poll_from_yast_year, 5)
+    older_polls = create_list(:poll_from_last_year, 5)
 
     expect(Poll.recent.count).to eq(2)
     expect(Poll.recent).to match_array(polls)
@@ -184,9 +184,9 @@ end
 
 describe Poll, "#photo_url" do
   context "when poll lacks a photo" do
-    it "the photo url is empty" do
+    it "the photo url is the missage default" do
       poll = create :yes_no_poll
-      expect(poll.photo_url(:medium)).to be_nil
+      expect(poll.photo_url(:medium)).to eq("/images/medium/missing.png")
     end
   end
 
@@ -195,6 +195,24 @@ describe Poll, "#photo_url" do
       poll = create :yes_no_poll_with_photo
       expect(poll.photo_url(:medium)).to eq(poll.photo.url(:medium))
     end
+  end
+end
+
+describe Poll, "#vote_cast!" do
+  it "should make a call to calculate popularity" do
+    poll = build :poll
+    poll.stub(:calculate_popularity!)
+    poll.vote_cast!
+    expect(poll).to have_received(:calculate_popularity!)
+  end
+
+  it "should make a call to end if all votes cast" do
+    poll = build :yes_no_poll
+    votes = build :vote, choice: poll.choices.first
+
+    poll.stub(:end!)
+    poll.vote_cast!
+    expect(poll).to have_received(:end!)
   end
 end
 

@@ -22,11 +22,7 @@ class Poll < ActiveRecord::Base
   before_save :normalize_phone_numbers!
 
   def photo_url(style)
-    if photo.file?
-      photo.url(style)
-    else
-      nil
-    end
+    photo && photo.url(style)
   end
 
   def has_photo?
@@ -95,6 +91,11 @@ class Poll < ActiveRecord::Base
 
   def notified_formatted_phone_numbers
     notified_voters.map(&:formatted_phone_number)
+  end
+
+  def vote_cast!
+    calculate_popularity!
+    end! if ok_to_auto_close?
   end
 
   def votes_cast_count

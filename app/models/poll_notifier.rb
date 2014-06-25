@@ -10,8 +10,8 @@ class PollNotifier < Object
   end
 
   def ok_to_sms?(vote)
-    return false unless @poll.present?
-    return false unless vote.present?
+    return false unless @poll
+    return false unless vote
     return false unless vote.has_phone_number?
     true
   end
