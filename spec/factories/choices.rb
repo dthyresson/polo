@@ -15,5 +15,17 @@ FactoryGirl.define do
       title "No"
       popularity 40
     end
+
+    factory :choice_with_votes do
+      after(:create) do |choice, evaluator|
+        create(:vote, poll: choice.poll)
+      end
+    end
+
+    factory :choice_with_cast_votes do
+      after(:create) do |choice, evaluator|
+        create(:vote, poll: choice.poll, choice: choice)
+      end
+    end
   end
 end

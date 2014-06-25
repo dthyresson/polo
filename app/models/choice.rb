@@ -16,4 +16,12 @@ class Choice < ActiveRecord::Base
   def self.by_popularity
     order("popularity desc")
   end
+
+  def votes_cast
+    votes.cast.first || NullVote.new
+  end
+
+  def votes_cast_count
+    votes.cast.count
+  end
 end

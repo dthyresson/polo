@@ -36,3 +36,21 @@ describe Choice, ".by_popularity" do
     expect(Choice.by_popularity).to eq([fred_choice, doug_choice, charlie_choice, bob_choice, alice_choice])
   end
 end
+
+describe Choice, "#votes_cast" do
+  it "returns votes cast for the choice" do
+    choice = create :choice
+    vote = create :vote, poll: choice.poll, choice: choice
+
+    expect(choice.votes_cast).to eq(choice.votes.first)
+  end
+end
+
+
+describe Choice, "#votes_cast_count" do
+  it "counts the number of votes cast for the choice" do
+    choice = create :choice_with_cast_votes
+
+    expect(choice.votes_cast_count).to eq(1)
+  end
+end

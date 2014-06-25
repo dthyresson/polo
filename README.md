@@ -327,49 +327,39 @@ Question and Photo
           },
           "choices": [
             {
-              "choice": {
-                "title": "No",
-                "votes_count": 0,
-                "popularity": 0,
-                "popularity_percentage": "0%"
-              }
+              "title": "No",
+              "votes_count": 0,
+              "popularity": 0,
+              "popularity_percentage": "0%"
             },
             {
-              "choice": {
-                "title": "Yes",
-                "votes_count": 0,
-                "popularity": 0,
-                "popularity_percentage": "0%"
-              }
+              "title": "Yes",
+              "votes_count": 0,
+              "popularity": 0,
+              "popularity_percentage": "0%"
             }
           ],
           "votes": [
             {
-              "vote": {
-                "short_url": "YPZeE6",
-                "voter_phone_number": "16175550002",
-                "voter_formatted_phone_number": "+1-617-555-0002",
-                "is_cast": false,
-                "is_notified": true                
-              }
+              "short_url": "YPZeE6",
+              "voter_phone_number": "16175550002",
+              "voter_formatted_phone_number": "+1-617-555-0002",
+              "is_cast": false,
+              "is_notified": true                
             },
             {
-              "vote": {
-                "voter_phone_number": "12125550003",
-                "voter_formatted_phone_number": "+1-212-555-0003",
-                "short_url": "2PQqPQ",
-                "is_cast": false,
-                "is_notified": false                
-              }
+              "voter_phone_number": "12125550003",
+              "voter_formatted_phone_number": "+1-212-555-0003",
+              "short_url": "2PQqPQ",
+              "is_cast": false,
+              "is_notified": false                
             },
             {
-              "vote": {
-                "voter_phone_number": "16172304800",
-                "voter_formatted_phone_number": "+1-617-230-4800",
-                "short_url": "YEwoED",
-                "is_cast": false,
-                "is_notified": true                
-              }
+              "voter_phone_number": "16172304800",
+              "voter_formatted_phone_number": "+1-617-230-4800",
+              "short_url": "YEwoED",
+              "is_cast": false,
+              "is_notified": true                
             }
           ]
         }
@@ -404,49 +394,39 @@ Question only
           },
           "choices": [
             {
-              "choice": {
-                "title": "No",
-                "votes_count": 0,
-                "popularity": 0,
-                "popularity_percentage": "0%"
-              }
+              "title": "No",
+              "votes_count": 0,
+              "popularity": 0,
+              "popularity_percentage": "0%"
             },
             {
-              "choice": {
-                "title": "Yes",
-                "votes_count": 0,
-                "popularity": 0,
-                "popularity_percentage": "0%"
-              }
+              "title": "Yes",
+              "votes_count": 0,
+              "popularity": 0,
+              "popularity_percentage": "0%"
             }
           ],
           "votes": [
             {
-              "vote": {
-                "voter_phone_number": "16175550002",
-                "voter_formatted_phone_number": "+1-617-555-0002",
-                "short_url": "MEgvV4",
-                "is_cast": false,
-                "is_notified": true
-              }
+              "voter_phone_number": "16175550002",
+              "voter_formatted_phone_number": "+1-617-555-0002",
+              "short_url": "MEgvV4",
+              "is_cast": false,
+              "is_notified": true
             },
             {
-              "vote": {
-                "voter_phone_number": "12125550003",
-                "voter_formatted_phone_number": "+1-212-555-0003",
-                "short_url": "eV9LOX",
-                "is_cast": false,
-                "is_notified": true
-              }
+              "voter_phone_number": "12125550003",
+              "voter_formatted_phone_number": "+1-212-555-0003",
+              "short_url": "eV9LOX",
+              "is_cast": false,
+              "is_notified": true
             },
             {
-              "vote": {
-                "voter_phone_number": "12025550004",
-                "voter_formatted_phone_number": "+1-202-555-0004",
-                "short_url": "qPvxV6",
-                "is_cast": false,
-                "is_notified": true
-              }
+              "voter_phone_number": "12025550004",
+              "voter_formatted_phone_number": "+1-202-555-0004",
+              "short_url": "qPvxV6",
+              "is_cast": false,
+              "is_notified": true
             }
           ]
         }
@@ -482,52 +462,42 @@ Photo Only
                     "popularity_percentage": "100%"
                 },
                 "choices": [
-                    {
-                        "choice": {
-                            "title": "No",
-                            "votes_count": 0,
-                            "popularity": 0,
-                            "popularity_percentage": "0%"
-                        }
-                    },
-                    {
-                        "choice": {
-                            "title": "Yes",
-                            "votes_count": 1,
-                            "popularity": 1,
-                            "popularity_percentage": "100%"
-                        }
-                    }
+                  {
+                    "title": "No",
+                    "votes_count": 0,
+                    "popularity": 0,
+                    "popularity_percentage": "0%"
+                  },
+                  {
+                    "title": "Yes",
+                    "votes_count": 1,
+                    "popularity": 1,
+                    "popularity_percentage": "100%"
+                  }
                 ],
                 "votes": [
-                    {
-                        "vote": {
-                            "voter_phone_number": "12125550003",
-                            "voter_formatted_phone_number": "+1-212-555-0003",
-                            "short_url": "2PQqPQ",
-                            "is_cast": false,
-                            "is_notified": true
-                        }
-                    },
-                    {
-                        "vote": {
-                            "voter_phone_number": "12025550004",
-                            "voter_formatted_phone_number": "+1-202-555-0004",
-                            "short_url": "YEwoED",
-                            "is_cast": false,
-                            "is_notified": true
-                        }
-                    },
-                    {
-                        "vote": {
-                            "voter_phone_number": "16175550002",
-                            "voter_formatted_phone_number": "+1-617-555-0002",
-                            "short_url": "YPZeE6",
-                            "is_cast": true,
-                            "is_notified": true",
-                            "choice_title": "Yes"
-                        }
-                    }
+                  {
+                    "voter_phone_number": "12125550003",
+                    "voter_formatted_phone_number": "+1-212-555-0003",
+                    "short_url": "2PQqPQ",
+                    "is_cast": false,
+                    "is_notified": true
+                  },
+                  {
+                    "voter_phone_number": "12025550004",
+                    "voter_formatted_phone_number": "+1-202-555-0004",
+                    "short_url": "YEwoED",
+                    "is_cast": false,
+                    "is_notified": true
+                  },
+                  {
+                    "voter_phone_number": "16175550002",
+                    "voter_formatted_phone_number": "+1-617-555-0002",
+                    "short_url": "YPZeE6",
+                    "is_cast": true,
+                    "is_notified": true",
+                    "choice_title": "Yes"
+                  }
                 ]
             }
         }

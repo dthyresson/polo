@@ -104,7 +104,7 @@ class Poll < ActiveRecord::Base
 
   def calculate_popularity!
     choices.each do |choice|
-      choice.update_attribute(:popularity, choice.votes.cast.count / votes.cast.count.to_f)
+      choice.update_attribute(:popularity, choice.votes_cast_count / votes.cast.count.to_f)
     end
   end
 

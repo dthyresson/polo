@@ -60,7 +60,7 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/id")
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
-    expect(response.body).to have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/choices/0/title")
   end
 
   it "is forbidden to get someone else's poll" do
@@ -87,7 +87,7 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0")
-    expect(response.body).to have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/choices/0/title")
   end
 
   it 'gets my poll with uncast votes' do
@@ -103,10 +103,10 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0")
-    expect(response.body).to have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/choices/0/title")
     expect(response.body).to have_json_path("poll/votes")
     expect(response.body).to have_json_path("poll/votes/0")
-    expect(response.body).to have_json_path("poll/votes/0/vote/short_url")
+    expect(response.body).to have_json_path("poll/votes/0/short_url")
   end
 
   it 'gets my poll with cast votes' do
@@ -125,12 +125,32 @@ describe "Poll API GET" do
     expect(response.body).to have_json_path("poll/question")
     expect(response.body).to have_json_path("poll/choices")
     expect(response.body).to have_json_path("poll/choices/0")
-    expect(response.body).to have_json_path("poll/choices/0/choice/title")
+    expect(response.body).to have_json_path("poll/choices/0/title")
     expect(response.body).to have_json_path("poll/votes")
     expect(response.body).to have_json_path("poll/votes/0")
-    expect(response.body).to have_json_path("poll/votes/0/vote/short_url")
-    expect(response.body).to have_json_path("poll/votes/0/vote/is_cast")
+    expect(response.body).to have_json_path("poll/votes/0/short_url")
+    expect(response.body).to have_json_path("poll/votes/0/is_cast")
     expect(response.body).to include("\"is_cast\":true")
+  end
+
+  it 'gets my poll with top choice' do
+    author = create :author_with_device
+    poll = create(:yes_no_poll_with_uncast_votes, author: author)
+
+    vote = poll.votes.first
+    vote.cast!(poll.choices.first)
+
+    headers = { "CONTENT_TYPE" => "application/json",
+                'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials(author.device_id) }
+    get "/v1/polls/#{poll.id}.json", nil, headers
+
+    puts parse_json(response.body)
+
+    expect(response).to be_success
+    expect(response.status).to eq(200)
+    expect(response.body).to have_json_path("poll/question")
+    expect(response.body).to have_json_path("poll/top_choice")
+    expect(response.body).to have_json_path("poll/top_choice/title")
   end
 end
 

@@ -36,22 +36,18 @@ json.poll do
   end
 
   json.choices ChoiceDecorator.decorate_collection(poll.choices) do |choice|
-    json.choice do
-      json.title choice.title
-      json.votes_count choice.votes.count
-      json.popularity choice.popularity
-      json.popularity_percentage choice.to_percentage
-    end
+    json.title choice.title
+    json.votes_count choice.votes.count
+    json.popularity choice.popularity
+    json.popularity_percentage choice.to_percentage
   end
 
   json.votes poll.votes do |vote|
-    json.vote do
-      json.short_url vote.short_url
-      json.voter_phone_number vote.voter_phone_number
-      json.voter_formatted_phone_number vote.formatted_phone_number
-      json.choice_title vote.choice.title if vote.cast?
-      json.is_cast vote.cast?
-      json.is_notified vote.notified?
-    end
+    json.short_url vote.short_url
+    json.voter_phone_number vote.voter_phone_number
+    json.voter_formatted_phone_number vote.formatted_phone_number
+    json.choice_title vote.choice.title if vote.cast?
+    json.is_cast vote.cast?
+    json.is_notified vote.notified?
   end
 end
