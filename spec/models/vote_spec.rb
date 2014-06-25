@@ -220,7 +220,7 @@ describe Vote, "#notified?" do
   end
 end
 
-describe Vote, "phone_number" do
+describe Vote, "#phone_number" do
   it "returns the phone_number of the voter" do
     phone_number = "14155551212"
     voter = create :voter, phone_number: phone_number
@@ -228,6 +228,22 @@ describe Vote, "phone_number" do
     expect(vote.phone_number).to eq(phone_number)
   end
 end
+
+describe Vote, "#has_phone_number?" do
+  it "checks if the vote's voter has a phone number" do
+    phone_number = "14155551212"
+    voter = create :voter, phone_number: phone_number
+    vote = create :vote, voter: voter
+    expect(vote.has_phone_number?).to be_true
+  end
+
+  it "checks if the vote's voter lacks a phone number" do
+    voter = build :voter, phone_number: nil
+    vote = build :vote, voter: voter
+    expect(vote.has_phone_number?).to be_false
+  end
+end
+
 
 describe Vote, "formatted_phone_number" do
   it "returns the formatted phone_number of the voter" do

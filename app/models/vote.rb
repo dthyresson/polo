@@ -65,8 +65,11 @@ class Vote < ActiveRecord::Base
     voter.phone_number if voter.present?
   end
 
+  def has_phone_number?
+    phone_number.present?
+  end
+
   def formatted_phone_number
     voter.formatted_phone_number if voter.present?
   end
-
 end
